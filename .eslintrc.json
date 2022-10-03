@@ -9,7 +9,7 @@
 		"plugin:@typescript-eslint/recommended",
 		"airbnb",
 		"airbnb-typescript",
-		"prettier"
+    "prettier"
 	],
 	"overrides": [],
 	"parser": "@typescript-eslint/parser",
@@ -24,7 +24,8 @@
 		"camelcase": "error",
 		"spaced-comment": "error",
 		"quotes": ["error", "single"],
-		"no-duplicate-imports": "error"
+		"no-duplicate-imports": "error",
+    "prettier/prettier": ["error"]
 	},
 	"settings": {
 		"import/resolver": {
