@@ -7,10 +7,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
+import Box, { BoxProps } from '@mui/material/Box';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-// import { UserType } from '../types';
+import { UserType } from '../types';
 import { createUserWithEmailAndPassword } from '../api/auth';
 
 import { createFirebaseDao } from '../api/dao';
@@ -22,17 +22,15 @@ function Signup() {
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [address, setAddress] = useState('');
-    // let userType: UserType = 'senior';
-    const [userType, setUserType] = useState('senior');
+    const [userType, setUserType] = useState<UserType>('senior');
 
     const validatePassword = () => !(password.trim() === '' || password.length < 8);
 
-    const handleToggle = (event: React.MouseEvent<HTMLElement>, newUserType: string) => {
-        // userType = newUserType;
+    const handleToggle = (event: React.MouseEvent<HTMLElement>, newUserType: UserType) => {
         setUserType(newUserType);
     };
 
-    const handleSubmit = (event: { preventDefault: () => void }) => {
+    const handleSubmit: BoxProps['onSubmit'] = (event) => {
         event.preventDefault();
         if (validatePassword()) {
             createUserWithEmailAndPassword(email, password)
