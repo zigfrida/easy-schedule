@@ -128,3 +128,4 @@ yarn-error.log*
 
 # ignore firebase build cache
 .firebase
+.vscode/
