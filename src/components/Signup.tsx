@@ -10,6 +10,7 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+// import { UserType } from '../types';
 import { createUserWithEmailAndPassword } from '../api/auth';
 
 import { createFirebaseDao } from '../api/dao';
@@ -21,43 +22,31 @@ function Signup() {
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [address, setAddress] = useState('');
+    // let userType: UserType = 'senior';
     const [userType, setUserType] = useState('senior');
 
-    const validateInput = () => {
-        if (password.trim() === '' || password.length < 8) return false;
-        return true;
-    };
+    const validatePassword = () => !(password.trim() === '' || password.length < 8);
 
     const handleToggle = (event: React.MouseEvent<HTMLElement>, newUserType: string) => {
+        // userType = newUserType;
         setUserType(newUserType);
     };
 
     const handleSubmit = (event: { preventDefault: () => void }) => {
         event.preventDefault();
-        if (validateInput()) {
+        if (validatePassword()) {
             createUserWithEmailAndPassword(email, password)
                 .then((registeredUser) => {
-                    if (userType === 'nurse') {
-                        const user = createFirebaseDao('nurse');
-                        user.add({
-                            uid: registeredUser.user.uid,
-                            firstName,
-                            lastName,
-                            email,
-                            address,
-                            userType,
-                        });
-                    } else {
-                        const user = createFirebaseDao('senior');
-                        user.add({
-                            uid: registeredUser.user.uid,
-                            firstName,
-                            lastName,
-                            email,
-                            address,
-                            userType,
-                        });
-                    }
+                    const user = createFirebaseDao(userType);
+                    user.add({
+                        uid: registeredUser.user.uid,
+                        firstName,
+                        lastName,
+                        email,
+                        address,
+                        userType,
+                    });
+
                     navigate('/');
                 })
                 .catch(() => {});
