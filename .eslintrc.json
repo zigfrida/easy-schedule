@@ -18,7 +18,7 @@
         "sourceType": "module",
         "project": "./tsconfig.json"
     },
-    "plugins": ["react", "@typescript-eslint", "react-hooks", "prettier"],
+    "plugins": ["react", "@typescript-eslint", "react-hooks", "prettier", "eslint-plugin-react"],
     "rules": {
         "react/react-in-jsx-scope": "off",
         "camelcase": "error",
