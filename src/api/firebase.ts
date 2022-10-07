@@ -12,7 +12,7 @@ const config = {
     measurementId: 'G-0KBKN0ZKYV',
 };
 
-const app = initializeApp(config);
+var app = initializeApp(config);
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
