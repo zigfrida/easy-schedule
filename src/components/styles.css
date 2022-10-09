@@ -1,0 +1,29 @@
+body{
+    margin:0;
+    padding:0;
+    display:flex;
+    justify-content: center; 
+   align-items: center;
+   background-color: cornflowerblue;
+   font-family: "Times New Roman", Times, sans-serif;
+}
+.form1
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+}
+.login
+{
+    height:50vh;
+    width:600px;
+ background-color:lavender;
+}
+
+#submit
+{
+ background-color: black;
+ color: white;
+}
