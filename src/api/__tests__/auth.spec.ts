@@ -50,7 +50,7 @@ describe('createUserWithEmailAndPassword', () => {
         jest.restoreAllMocks();
     });
     test('Unit test failure', () => {
-        expect(1).toBe(2);
+        expect(1).toBe(3);
     });
 
     test('should successfully create user', () => {
