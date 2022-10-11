@@ -49,6 +49,9 @@ describe('createUserWithEmailAndPassword', () => {
     beforeEach(() => {
         jest.restoreAllMocks();
     });
+    test('Unit test failure', () => {
+        expect(1).toBe(2);
+    });
 
     test('should successfully create user', () => {
         createUserWithEmailAndPassword('new@new.com', 'test test');
