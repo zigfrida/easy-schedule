@@ -1,9 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button, TextField } from '@mui/material/';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
 
 function Signin() {
     return (
@@ -40,8 +36,7 @@ function Signin() {
                     autoComplete='current-password'
                     variant='outlined'
                 />
-
-                <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
+                <Button type='submit' fullWidth variant='contained'>
                     Submit
                 </Button>
             </div>
