@@ -1,13 +1,15 @@
 import React from 'react';
 import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Signup from './components/Signup';
 
 function App() {
     return (
-        <div className='App'>
-            <header className='App-header'>
-                <h1>Easy Schedule - Nurse Calendar App</h1>
-            </header>
-        </div>
+        <BrowserRouter>
+            <Routes>
+                <Route path='/signup' element={<Signup />} />
+            </Routes>
+        </BrowserRouter>
     );
 }
 
