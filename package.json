@@ -33,9 +33,9 @@
         "eject": "react-scripts eject",
         "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
         "lint:fix": "npx eslint --fix . --ext .js,.jsx,.ts,.tsx",
-        "format": "npx prettier --write 'src/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
-        "format-check": "npx prettier --check 'src/**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
-        "type-check": "npx tsc --project ./",
+        "format": "npx prettier --write src",
+        "format-check": "npx prettier --check src",
+        "type-check": "npx tsc --project .",
         "check": "npm run lint && npm run format-check && npm run type-check"
     },
     "eslintConfig": {
