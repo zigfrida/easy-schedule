@@ -1,11 +1,13 @@
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 import { Button, TextField } from '@mui/material/';
 import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
 
 function Signin() {
     return (
-        <form
-            noValidate
-            autoComplete='off'
+        <Box
+            sx={{ mx: 'auto', width: 200 }}
             style={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -13,8 +15,7 @@ function Signin() {
                 height: '100vh',
             }}
         >
-            <div
-                className='login'
+            <Box
                 style={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -39,8 +40,8 @@ function Signin() {
                 <Button type='submit' fullWidth variant='contained'>
                     Submit
                 </Button>
-            </div>
-        </form>
+            </Box>
+        </Box>
     );
 }
 
