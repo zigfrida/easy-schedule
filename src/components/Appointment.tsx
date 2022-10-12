@@ -56,6 +56,7 @@ function Appointment() {
                         style={{
                             maxHeight: '40px',
                             float: 'right',
+                            fontSize: '11px',
                         }}
                     >
                         New Appointment
@@ -67,7 +68,7 @@ function Appointment() {
                             <Avatar alt='Remy Sharp' src='/static/images/avatar/1.jpg' />
                         </ListItemAvatar>
                         <ListItemText
-                            primary='Brunch this weekend?'
+                            primary='Lorem ipsum dolor sit amet'
                             secondary={
                                 <>
                                     <Typography
@@ -78,7 +79,9 @@ function Appointment() {
                                     >
                                         Ali Connors
                                     </Typography>
-                                    {' — Do you have Paris recommendations? Have you ever…'}
+                                    {
+                                        ' — Nulla facilisi. Maecenas scelerisque dolor eu leo molestie fringilla. Sed sapien orci, imperdiet aliquet aliquet nec, euismod et nisi. Aliquam posuere vel nunc eu luctus. Aliquam id placerat massa…'
+                                    }
                                 </>
                             }
                         />
@@ -89,7 +92,7 @@ function Appointment() {
                             <Avatar alt='Travis Howard' src='/static/images/avatar/2.jpg' />
                         </ListItemAvatar>
                         <ListItemText
-                            primary='Summer BBQ'
+                            primary='Lorem ipsum dolor sit amet'
                             secondary={
                                 <>
                                     <Typography
@@ -100,7 +103,9 @@ function Appointment() {
                                     >
                                         to Scott, Alex, Jennifer
                                     </Typography>
-                                    {' — Do you have Paris recommendations? Have you ever…'}
+                                    {
+                                        ' — Nulla facilisi. Maecenas scelerisque dolor eu leo molestie fringilla. Sed sapien orci, imperdiet aliquet aliquet nec, euismod et nisi. Aliquam posuere vel nunc eu luctus. Aliquam id placerat massa'
+                                    }
                                 </>
                             }
                         />
@@ -111,7 +116,7 @@ function Appointment() {
                             <Avatar alt='Cindy Baker' src='/static/images/avatar/3.jpg' />
                         </ListItemAvatar>
                         <ListItemText
-                            primary='Oui Oui'
+                            primary='Lorem ipsum dolor sit amet'
                             secondary={
                                 <>
                                     <Typography
@@ -122,7 +127,32 @@ function Appointment() {
                                     >
                                         Sandra Adams
                                     </Typography>
-                                    {' — Do you have Paris recommendations? Have you ever…'}
+                                    {
+                                        ' — Nulla facilisi. Maecenas scelerisque dolor eu leo molestie fringilla. Sed sapien orci, imperdiet aliquet aliquet nec, euismod et nisi. Aliquam posuere vel nunc eu luctus. Aliquam id placerat massa'
+                                    }
+                                </>
+                            }
+                        />
+                    </ListItem>
+                    <ListItem alignItems='flex-start'>
+                        <ListItemAvatar>
+                            <Avatar alt='Remy Sharp' src='/static/images/avatar/1.jpg' />
+                        </ListItemAvatar>
+                        <ListItemText
+                            primary='Lorem ipsum dolor sit amet'
+                            secondary={
+                                <>
+                                    <Typography
+                                        sx={{ display: 'inline' }}
+                                        component='span'
+                                        variant='body2'
+                                        color='text.primary'
+                                    >
+                                        Ali Connors
+                                    </Typography>
+                                    {
+                                        ' — Nulla facilisi. Maecenas scelerisque dolor eu leo molestie fringilla. Sed sapien orci, imperdiet aliquet aliquet nec, euismod et nisi. Aliquam posuere vel nunc eu luctus. Aliquam id placerat massa…'
+                                    }
                                 </>
                             }
                         />
