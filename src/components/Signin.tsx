@@ -15,8 +15,8 @@ function Signin() {
         event.preventDefault();
 
         signInWithEmailAndPassword(email, password)
-            .then((userCredential) => {
-                console.log(userCredential);
+            .then(() => {
+                // console.log(userCredential);
 
                 navigate('/menubar', { state: 'senior' });
             })
