@@ -1,4 +1,4 @@
-import { Button, TextField, Typography } from '@mui/material/';
+import { Box, Button, TextField, Typography } from '@mui/material/';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from '../api/auth';
@@ -39,7 +39,7 @@ function Signin() {
                 height: '60vh',
             }}
         >
-            <div
+            <Box
                 className='login'
                 style={{
                     display: 'flex',
@@ -72,7 +72,7 @@ function Signin() {
                 <Button type='submit' fullWidth variant='contained'>
                     Submit
                 </Button>
-            </div>
+            </Box>
         </form>
     );
 }
