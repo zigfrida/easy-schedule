@@ -45,8 +45,7 @@ function Menubar() {
                 </AppBar>
             </Box>
         );
-    }
-    if (state === 'senior') {
+    } else if (state === 'senior') {
         //  console.log('login by senior');
         return (
             <Box sx={{ flexGrow: 1 }}>
