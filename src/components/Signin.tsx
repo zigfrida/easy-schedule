@@ -1,4 +1,4 @@
-import { Box, Button, Container, TextField, Typography } from '@mui/material/';
+import { Box, BoxProps, Button, Container, TextField, Typography } from '@mui/material/';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from '../api/auth';
@@ -11,13 +11,12 @@ function Signin() {
     const navigate = useNavigate();
     // const [uuid, setUuid] = useState('');
 
-    function handleSignin(event: React.FormEvent<HTMLFormElement>) {
+    const handleSignin: BoxProps['onSubmit'] = (event) => {
         event.preventDefault();
 
         signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 console.log(userCredential);
-                //  const role = 'senior';
 
                 navigate('/menubar', { state: 'senior' });
             })
@@ -25,7 +24,7 @@ function Signin() {
 
         setEmail('');
         setPassword('');
-    }
+    };
 
     return (
         <Container

@@ -45,7 +45,8 @@ function Menubar() {
                 </AppBar>
             </Box>
         );
-    } else if (state === 'senior') {
+    }
+    if (state === 'senior') {
         //  console.log('login by senior');
         return (
             <Box sx={{ flexGrow: 1 }}>
@@ -77,33 +78,22 @@ function Menubar() {
                 </AppBar>
             </Box>
         );
-    } else {
-        return (
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar position='static'>
-                    <Toolbar>
-                        <ThemeProvider theme={theme}>
-                            <Button
-                                component={Link}
-                                to='/signup'
-                                color='inherit'
-                                sx={{ flexGrow: 1 }}
-                            >
-                                Sign up
-                            </Button>
-                            <Button
-                                component={Link}
-                                to='/signin'
-                                color='inherit'
-                                sx={{ flexGrow: 1 }}
-                            >
-                                Sign in
-                            </Button>
-                        </ThemeProvider>
-                    </Toolbar>
-                </AppBar>
-            </Box>
-        );
     }
+    return (
+        <Box sx={{ flexGrow: 1 }}>
+            <AppBar position='static'>
+                <Toolbar>
+                    <ThemeProvider theme={theme}>
+                        <Button component={Link} to='/signup' color='inherit' sx={{ flexGrow: 1 }}>
+                            Sign up
+                        </Button>
+                        <Button component={Link} to='/signin' color='inherit' sx={{ flexGrow: 1 }}>
+                            Sign in
+                        </Button>
+                    </ThemeProvider>
+                </Toolbar>
+            </AppBar>
+        </Box>
+    );
 }
 export default Menubar;
