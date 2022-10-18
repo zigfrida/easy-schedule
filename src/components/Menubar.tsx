@@ -1,9 +1,4 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Button from '@mui/material/Button';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { AppBar, Box, Toolbar, Button, createTheme, ThemeProvider } from '@mui/material/';
 import { useLocation, Link } from 'react-router-dom';
 
 const theme = createTheme();
@@ -19,11 +14,10 @@ theme.typography.button = {
 };
 
 function Menubar() {
-    //const { role } = state;
     const { state } = useLocation();
 
-    if (state == 'nurse') {
-        console.log('hello nurse');
+    if (state === 'nurse') {
+        // console.log('login by nurse');
         return (
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position='static'>
@@ -52,8 +46,8 @@ function Menubar() {
             </Box>
         );
     }
-    if (state == 'senior') {
-        console.log('hello nurse');
+    if (state === 'senior') {
+        //  console.log('login by senior');
         return (
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position='static'>
@@ -86,9 +80,30 @@ function Menubar() {
         );
     } else {
         return (
-            <Toolbar>
-                <img src='../logo192.png' alt='logo' />
-            </Toolbar>
+            <Box sx={{ flexGrow: 1 }}>
+                <AppBar position='static'>
+                    <Toolbar>
+                        <ThemeProvider theme={theme}>
+                            <Button
+                                component={Link}
+                                to='/signup'
+                                color='inherit'
+                                sx={{ flexGrow: 1 }}
+                            >
+                                Sign up
+                            </Button>
+                            <Button
+                                component={Link}
+                                to='/signin'
+                                color='inherit'
+                                sx={{ flexGrow: 1 }}
+                            >
+                                Sign in
+                            </Button>
+                        </ThemeProvider>
+                    </Toolbar>
+                </AppBar>
+            </Box>
         );
     }
 }
