@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography } from '@mui/material/';
+import { Box, Button, Container, TextField, Typography } from '@mui/material/';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from '../api/auth';
@@ -28,10 +28,7 @@ function Signin() {
     }
 
     return (
-        <form
-            onSubmit={handleSignin}
-            noValidate
-            autoComplete='off'
+        <Container
             style={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -40,6 +37,8 @@ function Signin() {
             }}
         >
             <Box
+                component='form'
+                onSubmit={handleSignin}
                 className='login'
                 style={{
                     display: 'flex',
@@ -73,7 +72,7 @@ function Signin() {
                     Submit
                 </Button>
             </Box>
-        </form>
+        </Container>
     );
 }
 
