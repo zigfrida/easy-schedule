@@ -17,7 +17,6 @@ function Menubar() {
     const { state } = useLocation();
 
     if (state === 'nurse') {
-        // console.log('login by nurse');
         return (
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position='static'>
@@ -46,8 +45,8 @@ function Menubar() {
             </Box>
         );
     }
+
     if (state === 'senior') {
-        //  console.log('login by senior');
         return (
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position='static'>
@@ -79,6 +78,7 @@ function Menubar() {
             </Box>
         );
     }
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position='static'>
@@ -96,4 +96,5 @@ function Menubar() {
         </Box>
     );
 }
+
 export default Menubar;
