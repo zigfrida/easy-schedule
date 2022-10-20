@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -9,20 +9,49 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Box, { BoxProps } from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import dayjs, { Dayjs } from 'dayjs';
+import { v4 } from 'uuid';
+import { User } from '../types';
+import { createFirebaseDao } from '../api/dao';
 
 function AppointmentForm() {
+    const [nursesList, setNursesList] = useState<User[] | null>([]);
     const [nurse, setNurse] = useState('');
     const [title, setTitle] = useState('');
     const [location, setLocation] = useState('');
     const [date, setDate] = useState<Dayjs | null>(dayjs());
 
+    useEffect(() => {
+        createFirebaseDao('user')
+            .getAllNurses()
+            .then((nurses) => {
+                setNursesList(nurses);
+                setNurse(nurses[0].uid);
+            });
+    }, []);
+
     const dateHandler = (newValue: Dayjs | null) => {
         setDate(newValue);
     };
 
+    const nurseHandler = (event: SelectChangeEvent) => {
+        setNurse(event.target.value as string);
+    };
+
     const handleSubmit: BoxProps['onSubmit'] = (event) => {
         event.preventDefault();
+        const appointment = createFirebaseDao('appointment');
+        appointment.add({
+            uid: v4(),
+            nurse,
+            title,
+            location,
+            date: date?.toString(),
+            senior: v4(), // To be replaced with current user signed-in
+        });
     };
 
     return (
@@ -33,17 +62,21 @@ function AppointmentForm() {
             <Box component='form' onSubmit={handleSubmit} sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
-                        <TextField
-                            autoComplete='given-name'
-                            name='nurse'
+                        <InputLabel id='demo-simple-select-label'>Nurse</InputLabel>
+                        <Select
                             required
-                            fullWidth
-                            id='nurse'
-                            label='Nurse'
-                            autoFocus
+                            labelId='demo-simple-select-label'
+                            id='demo-simple-select'
                             value={nurse}
-                            onChange={(e) => setNurse(e.target.value)}
-                        />
+                            label='Nurse'
+                            onChange={nurseHandler}
+                        >
+                            {nursesList?.map((item) => (
+                                <MenuItem key={item.uid} value={item.uid}>
+                                    {item.firstName} {item.lastName}
+                                </MenuItem>
+                            ))}
+                        </Select>
                     </Grid>
                     <Grid item xs={12}>
                         <TextField

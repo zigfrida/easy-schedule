@@ -35,7 +35,7 @@ function Signup() {
         if (validatePassword()) {
             createUserWithEmailAndPassword(email, password)
                 .then((registeredUser) => {
-                    const user = createFirebaseDao(userType);
+                    const user = createFirebaseDao('user');
                     user.add({
                         uid: registeredUser.user.uid,
                         firstName,
