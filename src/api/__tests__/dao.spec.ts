@@ -80,7 +80,7 @@ describe('createFirebaseDao', () => {
     test('should successfully add value to dao', async () => {
         const testValue = { id: 'test id', name: 'test name' };
 
-        await testDao.add(testValue);
+        await testDao.add(testValue.id, testValue);
         expect(await testDao.get(testValue.id)).toEqual(testValue);
     });
 

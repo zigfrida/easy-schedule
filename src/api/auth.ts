@@ -3,6 +3,7 @@ import {
     createUserWithEmailAndPassword as firebaseCreateUserWithEmailAndPassword,
     onAuthStateChanged as firebaseOnAuthStateChanged,
     signInWithEmailAndPassword as firebaseSignInWithEmailAndPassword,
+    signOut as firebaseSignOut,
 } from 'firebase/auth';
 
 import { ArgumentTypes } from '../types';
@@ -29,6 +30,10 @@ export function createUserWithEmailAndPassword(
 
 export function signInWithEmailAndPassword(email: string, password: string): SignInReturnType {
     return firebaseSignInWithEmailAndPassword(auth, email, password);
+}
+
+export function signOut(): Promise<void> {
+    return firebaseSignOut(auth);
 }
 
 export function onAuthStateChanged(
