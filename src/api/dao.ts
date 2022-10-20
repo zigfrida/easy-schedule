@@ -9,12 +9,11 @@ import {
     setDoc,
     updateDoc,
 } from 'firebase/firestore';
-import { v4 } from 'uuid';
 
 import { db } from './firebase';
 
 export interface Dao<T extends WithFieldValue<DocumentData>> {
-    add(value: T): void;
+    add(id: string, value: T): void;
     get(id: string): Promise<T | null>;
     getAll(): Promise<T[]>;
     remove(id: string): void;
@@ -24,8 +23,8 @@ export interface Dao<T extends WithFieldValue<DocumentData>> {
 export function createFirebaseDao<T extends WithFieldValue<DocumentData>>(
     collectionName: string,
 ): Dao<T> {
-    const add: Dao<T>['add'] = async (value) => {
-        await setDoc(doc(db, collectionName, v4()), value);
+    const add: Dao<T>['add'] = async (id, value) => {
+        await setDoc(doc(db, collectionName, id), value);
     };
 
     const get: Dao<T>['get'] = async (id) => {
