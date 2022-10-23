@@ -16,7 +16,8 @@ function Appointmentdetails() {
 
         // const userD = await diamond.get('0bbe4031-f433-493f-b6f5-c0dc3fa62da6');
         // const userD = await diamond.get('08a7f3c8-0650-438a-8ca8-f4bef97cfd90');
-        const userD = await diamond.get('455118da-ac90-46fd-8b05-6163e3697c7c');
+        const appointmentUid = '455118da-ac90-46fd-8b05-6163e3697c7c';
+        const userD = await diamond.get(appointmentUid);
 
         setTitle(userD?.title);
         setLocation(userD?.location);
