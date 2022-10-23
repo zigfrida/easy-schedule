@@ -15,22 +15,17 @@ function Appointmentdetails() {
         const diamond = createFirebaseDao('appointment');
 
         // const userD = await diamond.get('0bbe4031-f433-493f-b6f5-c0dc3fa62da6');
+        // const userD = await diamond.get('08a7f3c8-0650-438a-8ca8-f4bef97cfd90');
         const userD = await diamond.get('455118da-ac90-46fd-8b05-6163e3697c7c');
 
-        // onst userD = await diamond.get('08a7f3c8-0650-438a-8ca8-f4bef97cfd90');
-        //     console.log(userD);
-        //    console.log(userD.title);
         setTitle(userD?.title);
         setLocation(userD?.location);
         setDate(userD?.date);
 
         const nurseType = createFirebaseDao('user');
-
-        // const userD = await diamond.get('6b376fa8-3b42-4e7e-a49f-6260e9d97f1e');
         const nurseName = await nurseType.get(userD?.nurse);
-        //  console.log(nurseName);
-        const sum = nurseName?.firstName.concat(' ', nurseName?.lastName);
-        setName(sum);
+        const sumName = nurseName?.firstName.concat(' ', nurseName?.lastName);
+        setName(sumName);
     }
 
     useEffect(() => {
