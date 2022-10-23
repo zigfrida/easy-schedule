@@ -77,7 +77,7 @@ function Appointmentdetails() {
                 <TextField
                     value={date}
                     id='date'
-                    label='Date and Time'
+                    label='Date'
                     variant='filled'
                     InputProps={{
                         readOnly: true,
@@ -85,8 +85,8 @@ function Appointmentdetails() {
                 />
                 <TextField
                     value={name}
-                    id='name'
-                    label='Name of Nurse'
+                    id='nurse'
+                    label='Nurse'
                     variant='filled'
                     InputProps={{
                         readOnly: true,
