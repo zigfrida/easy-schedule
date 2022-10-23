@@ -1,6 +1,5 @@
-import { useEffect } from 'react';
-import { useState } from 'react';
-import Box, { BoxProps } from '@mui/material/Box';
+import React, { useEffect, useState } from 'react';
+import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -10,28 +9,28 @@ function Appointmentdetails() {
     const [title, setTitle] = useState('');
     const [location, setLocation] = useState('');
     const [date, setDate] = useState('');
-    const [firstName, setfirstName] = useState('');
-    const [lastName, setlastName] = useState('');
+    const [name, setName] = useState('');
 
     async function getData() {
         const diamond = createFirebaseDao('appointment');
 
-        const userD = await diamond.get('0bbe4031-f433-493f-b6f5-c0dc3fa62da6');
-        // const userD = await diamond.get('08a7f3c8-0650-438a-8ca8-f4bef97cfd90');
-        console.log(userD);
-        console.log(userD.title);
-        setTitle(userD.title);
-        setLocation(userD.location);
-        setDate(userD.date);
-        console.log('/////////////////////////////////////////////');
+        // const userD = await diamond.get('0bbe4031-f433-493f-b6f5-c0dc3fa62da6');
+        const userD = await diamond.get('455118da-ac90-46fd-8b05-6163e3697c7c');
+
+        // onst userD = await diamond.get('08a7f3c8-0650-438a-8ca8-f4bef97cfd90');
+        //     console.log(userD);
+        //    console.log(userD.title);
+        setTitle(userD?.title);
+        setLocation(userD?.location);
+        setDate(userD?.date);
 
         const nurseType = createFirebaseDao('user');
 
         // const userD = await diamond.get('6b376fa8-3b42-4e7e-a49f-6260e9d97f1e');
-        const nurseName = await nurseType.get(userD.nurse);
-        console.log(nurseName);
-        setfirstName(nurseName.firstName);
-        setlastName(nurseName.lastName);
+        const nurseName = await nurseType.get(userD?.nurse);
+        //  console.log(nurseName);
+        const sum = nurseName?.firstName.concat(' ', nurseName?.lastName);
+        setName(sum);
     }
 
     useEffect(() => {
@@ -65,6 +64,7 @@ function Appointmentdetails() {
                     value={title}
                     id='title'
                     label='Title'
+                    variant='filled'
                     InputProps={{
                         readOnly: true,
                     }}
@@ -74,6 +74,7 @@ function Appointmentdetails() {
                     value={location}
                     id='location'
                     label='Location'
+                    variant='filled'
                     InputProps={{
                         readOnly: true,
                     }}
@@ -82,28 +83,20 @@ function Appointmentdetails() {
                     value={date}
                     id='date'
                     label='Date and Time'
+                    variant='filled'
                     InputProps={{
                         readOnly: true,
                     }}
                 />
-                <Box>
-                    <TextField
-                        value={firstName}
-                        id='nurse'
-                        label='First Name of Nurse'
-                        InputProps={{
-                            readOnly: true,
-                        }}
-                    />
-                    <TextField
-                        value={lastName}
-                        id='nurse'
-                        label='Last Name of Nurse'
-                        InputProps={{
-                            readOnly: true,
-                        }}
-                    />
-                </Box>
+                <TextField
+                    value={name}
+                    id='name'
+                    label='Name of Nurse'
+                    variant='filled'
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
             </Box>
         </Container>
     );
