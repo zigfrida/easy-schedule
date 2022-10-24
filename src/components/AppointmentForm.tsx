@@ -17,7 +17,10 @@ import { v4 } from 'uuid';
 import { User } from '../types';
 import { createFirebaseDao } from '../api/dao';
 
+import useAuthData from '../hooks/useAuthData';
+
 function AppointmentForm() {
+    const { user } = useAuthData();
     const [nursesList, setNursesList] = useState<User[] | null>([]);
     const [nurse, setNurse] = useState('');
     const [title, setTitle] = useState('');
@@ -25,6 +28,7 @@ function AppointmentForm() {
     const [date, setDate] = useState<Dayjs | null>(dayjs());
 
     useEffect(() => {
+        console.log(user?.uid);
         createFirebaseDao('user')
             .getAllNurses()
             .then((nurses) => {
@@ -44,13 +48,13 @@ function AppointmentForm() {
     const handleSubmit: BoxProps['onSubmit'] = (event) => {
         event.preventDefault();
         const appointment = createFirebaseDao('appointment');
-        appointment.add({
-            uid: v4(),
+        appointment.add(v4(), {
+            // uid: v4(),
             nurse,
             title,
             location,
             date: date?.toString(),
-            senior: v4(), // To be replaced with current user signed-in
+            senior: user?.uid, // To be replaced with current user signed-in
         });
     };
 

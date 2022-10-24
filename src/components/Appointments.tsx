@@ -16,19 +16,23 @@ import AppointmentForm from './AppointmentForm';
 
 import { Appointment } from '../types';
 import { createFirebaseDao } from '../api/appointmentDAO';
+import useAuthData from '../hooks/useAuthData';
 
 function Appointments() {
+    const { user } = useAuthData();
     const [open, setOpen] = useState(false);
     const [appointments, setAppointments] = useState<Appointment[] | null>([]);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     useEffect(() => {
-        createFirebaseDao()
-            .getAllNurseAppointments('A5zFHz5E4LPyB1LL26TdQC5dyQ73')
-            .then((data) => {
-                setAppointments(data);
-            });
+        if (user?.uid) {
+            createFirebaseDao()
+                .getAllNurseAppointments(user?.uid)
+                .then((data) => {
+                    setAppointments(data);
+                });
+        }
     }, []);
 
     const style = {
