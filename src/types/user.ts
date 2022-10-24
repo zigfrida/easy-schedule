@@ -1,10 +1,14 @@
 export type UserType = 'nurse' | 'senior';
 
-export type User = {
-    uid: string;
-    address?: string;
+export interface SeniorUser {
+    address: string;
     email: string;
     firstName: string;
     lastName: string;
     userType: UserType;
-};
+    uid: string;
+}
+
+export type NurseUser = Omit<SeniorUser, 'address'>;
+
+export type User = SeniorUser | NurseUser;
