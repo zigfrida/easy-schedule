@@ -1,7 +1,7 @@
-import { DocumentReference, DocumentData, Firestore } from 'firebase/firestore';
+import { DocumentReference, DocumentData, Firestore, where } from 'firebase/firestore';
 
 import { ArrayElement } from '../../types';
-import { createFirebaseDao } from '../dao';
+import { createFirebaseDao, constructQueryConstraints } from '../dao';
 
 const collection = [
     {
@@ -20,8 +20,10 @@ const collection = [
 
 jest.mock('firebase/firestore', () => {
     let mockCollection = collection;
+    const originalModule = jest.requireActual('firebase/firestore');
 
     return {
+        ...originalModule,
         doc: (_db: Firestore, _collectionName: string, id: string) => id,
         getDocs: () =>
             Promise.resolve({
@@ -92,5 +94,20 @@ describe('createFirebaseDao', () => {
     test('should successfully update value to the dao', async () => {
         await testDao.update('id2', { name: 'niko' });
         expect(await testDao.get('id2')).toEqual({ id: 'id2', name: 'niko' });
+    });
+});
+
+describe('constructQueryConstraints', () => {
+    test('should successfully construct query constraints', () => {
+        const EXPECTED = [where('first', '==', 'foo'), where('second', '==', 'bar')];
+        expect(constructQueryConstraints({ first: 'foo', second: 'bar' })).toEqual(EXPECTED);
+    });
+
+    test('should gracefully handle empty object', () => {
+        expect(constructQueryConstraints({})).toEqual([]);
+    });
+
+    test('should gracefully handle undefined parameter', () => {
+        expect(constructQueryConstraints()).toEqual([]);
     });
 });
