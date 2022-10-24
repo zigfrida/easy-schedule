@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -14,26 +13,23 @@ import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import dayjs, { Dayjs } from 'dayjs';
 import { v4 } from 'uuid';
-import { User } from '../types';
 import { createFirebaseDao } from '../api/dao';
-
 import useAuthData from '../hooks/useAuthData';
 
-function AppointmentForm() {
+function AppointmentForm({ handleClose }: any) {
     const { user } = useAuthData();
-    const [nursesList, setNursesList] = useState<User[] | null>([]);
+    const [nursesList, setNursesList] = useState<any[] | null>([]);
     const [nurse, setNurse] = useState('');
     const [title, setTitle] = useState('');
     const [location, setLocation] = useState('');
     const [date, setDate] = useState<Dayjs | null>(dayjs());
 
     useEffect(() => {
-        console.log(user?.uid);
         createFirebaseDao('user')
-            .getAllNurses()
-            .then((nurses) => {
-                setNursesList(nurses);
-                setNurse(nurses[0].uid);
+            .getAll({ userType: 'nurse' })
+            .then((data) => {
+                setNursesList(data);
+                setNurse(data[0].uid);
             });
     }, []);
 
@@ -48,14 +44,16 @@ function AppointmentForm() {
     const handleSubmit: BoxProps['onSubmit'] = (event) => {
         event.preventDefault();
         const appointment = createFirebaseDao('appointment');
-        appointment.add(v4(), {
-            // uid: v4(),
+        const id = v4();
+        appointment.add(id, {
+            uid: id,
             nurse,
             title,
             location,
             date: date?.toString(),
-            senior: user?.uid, // To be replaced with current user signed-in
+            senior: user?.uid,
         });
+        handleClose();
     };
 
     return (

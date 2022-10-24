@@ -4,36 +4,45 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 // import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import AppointmentForm from './AppointmentForm';
+import Menubar from './Menubar';
 
-import { Appointment } from '../types';
-import { createFirebaseDao } from '../api/appointmentDAO';
+import { createFirebaseDao } from '../api/dao';
 import useAuthData from '../hooks/useAuthData';
 
 function Appointments() {
     const { user } = useAuthData();
     const [open, setOpen] = useState(false);
-    const [appointments, setAppointments] = useState<Appointment[] | null>([]);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const [appointments, setAppointments] = useState<any[] | null>([]);
+    const handleOpen = (): void => setOpen(true);
+    const handleClose = (): void => setOpen(false);
 
     useEffect(() => {
         if (user?.uid) {
-            createFirebaseDao()
-                .getAllNurseAppointments(user?.uid)
-                .then((data) => {
-                    setAppointments(data);
-                });
+            if (user?.userType === 'nurse') {
+                createFirebaseDao('appointment')
+                    .getAll({ nurse: user?.uid })
+                    .then((data) => {
+                        setAppointments(data);
+                    });
+            } else {
+                createFirebaseDao('appointment')
+                    .getAll({ senior: user?.uid })
+                    .then((data) => {
+                        setAppointments(data);
+                    });
+            }
         }
-    }, []);
+    }, [user?.uid]);
 
     const style = {
         position: 'absolute',
@@ -50,6 +59,7 @@ function Appointments() {
 
     return (
         <div>
+            <Menubar />
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -57,7 +67,7 @@ function Appointments() {
                 aria-describedby='modal-modal-description'
             >
                 <Box sx={style}>
-                    <AppointmentForm />
+                    <AppointmentForm handleClose={handleClose} />
                 </Box>
             </Modal>
             <Container maxWidth='md' style={{ marginTop: '4%' }}>
@@ -83,23 +93,37 @@ function Appointments() {
                     {appointments?.map((item) => (
                         // <>
                         <ListItem key={item.uid} alignItems='flex-start'>
-                            <ListItemAvatar>
-                                <Avatar alt='Remy Sharp' src='/static/images/avatar/1.jpg' />
-                            </ListItemAvatar>
+                            <CalendarMonthIcon />
                             <ListItemText
                                 primary={item.title}
                                 secondary={
-                                    <Typography
-                                        sx={{ display: 'inline' }}
-                                        component='span'
-                                        variant='body2'
-                                        color='text.primary'
-                                    >
-                                        Nurse: Ali Connors
-                                    </Typography>
+                                    <>
+                                        <AccountCircleIcon />
+                                        <Typography
+                                            sx={{ display: 'inline' }}
+                                            component='span'
+                                            variant='body2'
+                                            color='text.primary'
+                                        >
+                                            Nurse: Ali Connors
+                                        </Typography>
+                                    </>
                                 }
                             />
-                            <ListItemText primary={item.date} secondary={item.location} />
+                            <ListItemText
+                                primary={
+                                    <>
+                                        <AccessTimeIcon />
+                                        {item.date}
+                                    </>
+                                }
+                                secondary={
+                                    <>
+                                        <LocationOnIcon />
+                                        {item.location}
+                                    </>
+                                }
+                            />
                         </ListItem>
                         //     {/* <Divider key={item.uid + 1} variant='inset' component='li' />
                         // </> */}

@@ -8,14 +8,10 @@ import {
     getDoc,
     getDocs,
     setDoc,
-    query,
-    where,
     updateDoc,
     where,
     query,
 } from 'firebase/firestore';
-
-import { User, Appointment } from '../types';
 
 import { db } from './firebase';
 
@@ -25,9 +21,6 @@ export interface Dao<T extends WithFieldValue<DocumentData>> {
     getAll(filter?: Partial<T>): Promise<T[]>;
     remove(id: string): void;
     update(id: string, value: T): void;
-    getAllNurses(): Promise<User[]>;
-    getAllSeniorAppointments(id: string): Promise<Appointment[]>;
-    getAllNurseAppointments(is: string): Promise<Appointment[]>;
 }
 
 export function constructQueryConstraints<T extends object>(
@@ -72,32 +65,11 @@ export function createFirebaseDao<T extends WithFieldValue<DocumentData>>(
         return querySnapshot.docs.map((data) => data.data() as T);
     };
 
-    const getAllNurses: Dao<User>['getAllNurses'] = async () => {
-        const q = query(collection(db, 'user'), where('userType', '==', 'nurse'));
-        const querySnapshot = await getDocs(q);
-        return querySnapshot.docs.map((data) => data.data() as User);
-    };
-
-    const getAllSeniorAppointments: Dao<Appointment>['getAllSeniorAppointments'] = async (id) => {
-        const q = query(collection(db, 'appointment'), where('senior', '==', id));
-        const querySnapshot = await getDocs(q);
-        return querySnapshot.docs.map((data) => data.data() as Appointment);
-    };
-
-    const getAllNurseAppointments: Dao<Appointment>['getAllNurseAppointments'] = async (id) => {
-        const q = query(collection(db, 'appointment'), where('nurse', '==', id));
-        const querySnapshot = await getDocs(q);
-        return querySnapshot.docs.map((data) => data.data() as Appointment);
-    };
-
     return {
         add,
         get,
         remove,
         update,
         getAll,
-        getAllNurses,
-        getAllSeniorAppointments,
-        getAllNurseAppointments,
     };
 }
