@@ -15,17 +15,18 @@ import dayjs, { Dayjs } from 'dayjs';
 import { v4 } from 'uuid';
 import { createFirebaseDao } from '../api/dao';
 import useAuthData from '../hooks/useAuthData';
+import { NurseUser, Props } from '../types';
 
-function AppointmentForm({ handleClose }: any) {
+function AppointmentForm({ handleClose }: Props) {
     const { user } = useAuthData();
-    const [nursesList, setNursesList] = useState<any[] | null>([]);
+    const [nursesList, setNursesList] = useState<NurseUser[] | null>([]);
     const [nurse, setNurse] = useState('');
     const [title, setTitle] = useState('');
     const [location, setLocation] = useState('');
     const [date, setDate] = useState<Dayjs | null>(dayjs());
 
     useEffect(() => {
-        createFirebaseDao('user')
+        createFirebaseDao<NurseUser>('user')
             .getAll({ userType: 'nurse' })
             .then((data) => {
                 setNursesList(data);

@@ -18,24 +18,25 @@ import Menubar from './Menubar';
 
 import { createFirebaseDao } from '../api/dao';
 import useAuthData from '../hooks/useAuthData';
+import { Appointment } from '../types';
 
 function Appointments() {
     const { user } = useAuthData();
     const [open, setOpen] = useState(false);
-    const [appointments, setAppointments] = useState<any[] | null>([]);
-    const handleOpen = (): void => setOpen(true);
-    const handleClose = (): void => setOpen(false);
+    const [appointments, setAppointments] = useState<Appointment[] | null>([]);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
     useEffect(() => {
         if (user?.uid) {
             if (user?.userType === 'nurse') {
-                createFirebaseDao('appointment')
+                createFirebaseDao<Appointment>('appointment')
                     .getAll({ nurse: user?.uid })
                     .then((data) => {
                         setAppointments(data);
                     });
             } else {
-                createFirebaseDao('appointment')
+                createFirebaseDao<Appointment>('appointment')
                     .getAll({ senior: user?.uid })
                     .then((data) => {
                         setAppointments(data);

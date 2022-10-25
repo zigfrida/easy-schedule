@@ -18,7 +18,7 @@ function Signin() {
 
         signInWithEmailAndPassword(email, password)
             .then(() => {
-                navigate('/menubar');
+                navigate('/appointment');
             })
             .catch(() => {});
 

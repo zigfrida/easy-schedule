@@ -50,6 +50,9 @@ function Menubar() {
                             <Button color='inherit' sx={{ flexGrow: 1 }}>
                                 Profile
                             </Button>
+                            <Button color='inherit' sx={{ flexGrow: 1 }}>
+                                Logout
+                            </Button>
                         </ThemeProvider>
                     </Toolbar>
                 </AppBar>
