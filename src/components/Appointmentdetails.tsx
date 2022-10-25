@@ -4,14 +4,21 @@ import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { createFirebaseDao } from '../api/dao';
+import useAuthData from '../hooks/useAuthData';
 
 function Appointmentdetails() {
     const [title, setTitle] = useState('');
     const [location, setLocation] = useState('');
     const [date, setDate] = useState('');
     const [name, setName] = useState('');
+    const [label, setLabel] = useState('');
+
+    const { user } = useAuthData();
 
     async function getData() {
+        if (user?.userType === 'nurse') {
+            setLabel('Senior');
+        } else setLabel('Nurse');
         const diamond = createFirebaseDao('appointment');
 
         // const userD = await diamond.get('0bbe4031-f433-493f-b6f5-c0dc3fa62da6');
@@ -86,8 +93,8 @@ function Appointmentdetails() {
                 />
                 <TextField
                     value={name}
-                    id='nurse'
-                    label='Nurse'
+                    id='service'
+                    label={label}
                     variant='filled'
                     InputProps={{
                         readOnly: true,
