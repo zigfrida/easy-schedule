@@ -17,7 +17,7 @@ function Signin() {
 
         signInWithEmailAndPassword(email, password)
             .then(() => {
-                navigate('/menubar', { state: 'senior' });
+                navigate('/appointmentdetails');
             })
             .catch(() => {});
 
