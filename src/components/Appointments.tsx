@@ -13,6 +13,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
+import dayjs from 'dayjs';
 import AppointmentForm from './AppointmentForm';
 import Menubar from './Menubar';
 
@@ -33,13 +34,23 @@ function Appointments() {
                 createFirebaseDao<Appointment>('appointment')
                     .getAll({ nurse: user?.uid })
                     .then((data) => {
-                        setAppointments(data);
+                        const result = data.filter((obj) => {
+                            const appointmentDate = dayjs(obj.date);
+                            const today = dayjs();
+                            return appointmentDate.isAfter(today);
+                        });
+                        setAppointments(result);
                     });
             } else {
                 createFirebaseDao<Appointment>('appointment')
                     .getAll({ senior: user?.uid })
                     .then((data) => {
-                        setAppointments(data);
+                        const result = data.filter((obj) => {
+                            const appointmentDate = dayjs(obj.date);
+                            const today = dayjs();
+                            return appointmentDate.isAfter(today);
+                        });
+                        setAppointments(result);
                     });
             }
         }
