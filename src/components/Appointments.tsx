@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
@@ -11,37 +11,29 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import dayjs from 'dayjs';
 import AppointmentForm from './AppointmentForm';
 import Menubar from './Menubar';
 
-import { appointmentDao } from '../api/collections';
 import useAuthData from '../hooks/useAuthData';
-import { Appointment } from '../types';
+import useAppointments from '../hooks/useAppointments';
 
 function Appointments() {
     const { user } = useAuthData();
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
-    const [appointments, setAppointments] = useState<Appointment[] | null>([]);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    useEffect(() => {
-        if (user?.uid) {
-            const filter =
-                user?.userType === 'nurse' ? { nurse: user?.uid } : { senior: user?.uid };
+    const appointmentFilter = useMemo(
+        () => (user?.userType === 'nurse' ? { nurse: user?.uid } : { senior: user?.uid }),
+        [user?.userType, user?.uid],
+    );
 
-            appointmentDao.subscribe((data) => {
-                const result = data.filter((obj) => {
-                    const appointmentDate = dayjs(obj.date);
-                    const today = dayjs();
-                    return appointmentDate.isAfter(today);
-                });
-                setAppointments(result);
-            }, filter);
-        }
-    }, [user?.uid]);
+    const [appointments] = useAppointments({
+        /* Do not fetch appointments data if user data is not available */
+        active: Boolean(user),
+        filter: appointmentFilter,
+    });
 
     const style = {
         position: 'absolute',
