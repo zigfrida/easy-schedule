@@ -1,5 +1,7 @@
 import {
     DocumentData,
+    onSnapshot,
+    Query,
     QueryConstraint,
     WithFieldValue,
     collection,
@@ -20,6 +22,7 @@ export interface Dao<T extends WithFieldValue<DocumentData>> {
     get(id: string): Promise<T | null>;
     getAll(filter?: Partial<T>): Promise<T[]>;
     remove(id: string): void;
+    subscribe(callback: (result: T[]) => void, filter?: Partial<T>): void;
     update(id: string, value: T): void;
 }
 
@@ -27,6 +30,15 @@ export function constructQueryConstraints<T extends object>(
     filter: Partial<T> = {},
 ): QueryConstraint[] {
     return Object.entries(filter).map(([key, value]) => where(key, '==', value));
+}
+
+export function createDataQuery<T extends object>(
+    collectionName: string,
+    filter: Partial<T> = {},
+): Query<DocumentData> {
+    const queryConstraints = constructQueryConstraints(filter);
+    const collectionRef = collection(db, collectionName);
+    return queryConstraints.length ? query(collectionRef, ...queryConstraints) : collectionRef;
 }
 
 export function createFirebaseDao<T extends WithFieldValue<DocumentData>>(
@@ -55,21 +67,31 @@ export function createFirebaseDao<T extends WithFieldValue<DocumentData>>(
     };
 
     const getAll: Dao<T>['getAll'] = async (filter?: Partial<T>) => {
-        const queryConstraints = constructQueryConstraints(filter);
-        const collectionRef = collection(db, collectionName);
-        const dataQuery = queryConstraints.length
-            ? query(collectionRef, ...queryConstraints)
-            : collectionRef;
-
-        const querySnapshot = await getDocs(dataQuery);
+        const querySnapshot = await getDocs(createDataQuery(collectionName, filter));
         return querySnapshot.docs.map((data) => data.data() as T);
+    };
+
+    const subscribe: Dao<T>['subscribe'] = (callback, filter) => {
+        const dataQuery = createDataQuery(collectionName, filter);
+
+        const unsub = onSnapshot(dataQuery, (snapshot) => {
+            const data: T[] = [];
+            snapshot.forEach((result) => {
+                data.push(result.data() as T);
+            });
+
+            callback(data);
+        });
+
+        return unsub;
     };
 
     return {
         add,
         get,
-        remove,
-        update,
         getAll,
+        remove,
+        subscribe,
+        update,
     };
 }
