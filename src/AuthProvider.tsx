@@ -1,3 +1,4 @@
+import { User as FirebaseUser } from 'firebase/auth';
 import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
@@ -16,8 +17,9 @@ export interface Props {
 }
 
 function AuthProvider({ children }: Props) {
+    const [authenticated, setAuthenticated] = useState(false);
     const [authUser, setAuthUser] = useState<User>();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const signIn: AuthContextData['signIn'] = useCallback((email, password) => {
         setLoading(true);
@@ -40,8 +42,10 @@ function AuthProvider({ children }: Props) {
     useEffect(() => {
         setLoading(true);
 
-        onAuthStateChanged((authInfo) => {
+        function fetchAuthUser(authInfo: FirebaseUser | null): void {
             if (authInfo) {
+                setAuthenticated(true);
+
                 userDao.get(authInfo.uid).then((userData) => {
                     if (userData) {
                         setAuthUser(userData);
@@ -49,20 +53,18 @@ function AuthProvider({ children }: Props) {
                 });
             } else {
                 setAuthUser(undefined);
+                setAuthenticated(false);
             }
 
             setLoading(false);
-        });
+        }
+
+        onAuthStateChanged(fetchAuthUser);
     }, []);
 
     const value = useMemo<AuthContextData>(
-        () => ({
-            loading,
-            signIn,
-            signUp,
-            user: authUser,
-        }),
-        [authUser, loading, signIn],
+        () => ({ authenticated, loading, signIn, signUp, user: authUser }),
+        [authUser, authenticated, loading, signIn],
     );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
