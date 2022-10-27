@@ -4,7 +4,8 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from '@mui/material/';
-import { useLocation, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import useAuthData from '../hooks/useAuthData';
 
 const theme = createTheme();
 
@@ -19,9 +20,9 @@ theme.typography.button = {
 };
 
 function Menubar() {
-    const { state } = useLocation();
+    const { user } = useAuthData();
 
-    if (state === 'nurse') {
+    if (user) {
         return (
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position='static'>
@@ -35,47 +36,22 @@ function Menubar() {
                             >
                                 Home
                             </Button>
-                            <Button color='inherit' sx={{ flexGrow: 1 }}>
-                                View Appointments
-                            </Button>
-                            <Button color='inherit' sx={{ flexGrow: 1 }}>
-                                Chat
-                            </Button>
-                            <Button color='inherit' sx={{ flexGrow: 1 }}>
-                                Profile
-                            </Button>
-                        </ThemeProvider>
-                    </Toolbar>
-                </AppBar>
-            </Box>
-        );
-    }
-
-    if (state === 'senior') {
-        return (
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar position='static'>
-                    <Toolbar>
-                        <ThemeProvider theme={theme}>
                             <Button
                                 component={Link}
-                                to='/signup'
+                                to='/appointment'
                                 color='inherit'
                                 sx={{ flexGrow: 1 }}
                             >
-                                Home
-                            </Button>
-                            <Button color='inherit' sx={{ flexGrow: 1 }}>
                                 View Appointments
                             </Button>
                             <Button color='inherit' sx={{ flexGrow: 1 }}>
                                 Chat
                             </Button>
                             <Button color='inherit' sx={{ flexGrow: 1 }}>
-                                Register Appointment
+                                Profile
                             </Button>
                             <Button color='inherit' sx={{ flexGrow: 1 }}>
-                                Profile
+                                Logout
                             </Button>
                         </ThemeProvider>
                     </Toolbar>
