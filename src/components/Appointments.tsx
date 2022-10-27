@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Container from '@mui/material/Container';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-// import Divider from '@mui/material/Divider';
-import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -23,6 +21,7 @@ import { Appointment } from '../types';
 
 function Appointments() {
     const { user } = useAuthData();
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [appointments, setAppointments] = useState<Appointment[] | null>([]);
     const handleOpen = () => setOpen(true);
@@ -101,46 +100,55 @@ function Appointments() {
                         New Appointment
                     </Button>
                 </Stack>
-                <List sx={{ width: '100%', maxWidth: 800, bgcolor: 'background.paper' }}>
-                    {appointments?.map((item) => (
-                        // <>
-                        <ListItem key={item.uid} alignItems='flex-start'>
+
+                {appointments?.map((item) => (
+                    <Box
+                        key={item.uid}
+                        sx={{ flexGrow: 1, marginTop: 2 }}
+                        onClick={() => navigate(`/appointment/${item.uid}`)}
+                    >
+                        <Stack direction='row' spacing={2} sx={{ marginTop: 1, marginBottom: 1 }}>
                             <CalendarMonthIcon />
-                            <ListItemText
-                                primary={item.title}
-                                secondary={
-                                    <>
-                                        <AccountCircleIcon />
-                                        <Typography
-                                            sx={{ display: 'inline' }}
-                                            component='span'
-                                            variant='body2'
-                                            color='text.primary'
-                                        >
-                                            Nurse: Ali Connors
-                                        </Typography>
-                                    </>
-                                }
-                            />
-                            <ListItemText
-                                primary={
-                                    <>
-                                        <AccessTimeIcon />
-                                        {item.date}
-                                    </>
-                                }
-                                secondary={
-                                    <>
-                                        <LocationOnIcon />
-                                        {item.location}
-                                    </>
-                                }
-                            />
-                        </ListItem>
-                        //     {/* <Divider key={item.uid + 1} variant='inset' component='li' />
-                        // </> */}
-                    ))}
-                </List>
+                            <Typography
+                                variant='body2'
+                                color='text.primary'
+                                component='span'
+                                gutterBottom
+                                style={{ flex: 1 }}
+                            >
+                                {item.title}
+                            </Typography>
+                            <AccountCircleIcon />
+                            <Typography
+                                variant='body2'
+                                color='text.primary'
+                                gutterBottom
+                                style={{ flex: 1 }}
+                            >
+                                {item.nurse}
+                            </Typography>
+                            <LocationOnIcon />
+                            <Typography
+                                variant='body2'
+                                color='text.primary'
+                                gutterBottom
+                                style={{ flex: 1 }}
+                            >
+                                {item.location}
+                            </Typography>
+                            <AccessTimeIcon />
+                            <Typography
+                                variant='body2'
+                                color='text.primary'
+                                gutterBottom
+                                style={{ flex: 1 }}
+                            >
+                                {item.date}
+                            </Typography>
+                        </Stack>
+                        <Divider />
+                    </Box>
+                ))}
             </Container>
         </div>
     );

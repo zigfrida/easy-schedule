@@ -38,7 +38,7 @@ function Menubar() {
                             </Button>
                             <Button
                                 component={Link}
-                                to='/appointments'
+                                to='/appointment'
                                 color='inherit'
                                 sx={{ flexGrow: 1 }}
                             >
