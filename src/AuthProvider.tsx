@@ -1,6 +1,10 @@
-import React, { ReactElement, useEffect, useMemo, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { onAuthStateChanged } from './api/auth';
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+} from './api/auth';
 import { createFirebaseDao } from './api/dao';
 import AuthContext from './context/authContext';
 import { AuthContextData, User } from './types';
@@ -13,8 +17,29 @@ export interface Props {
 
 function AuthProvider({ children }: Props) {
     const [authUser, setAuthUser] = useState<User>();
+    const [loading, setLoading] = useState(false);
+
+    const signIn: AuthContextData['signIn'] = useCallback((email, password) => {
+        setLoading(true);
+
+        return signInWithEmailAndPassword(email, password).then((user) => {
+            setLoading(false);
+            return user;
+        });
+    }, []);
+
+    const signUp: AuthContextData['signUp'] = useCallback((email, password) => {
+        setLoading(true);
+
+        return createUserWithEmailAndPassword(email, password).then((registeredUser) => {
+            setLoading(false);
+            return registeredUser;
+        });
+    }, []);
 
     useEffect(() => {
+        setLoading(true);
+
         onAuthStateChanged((authInfo) => {
             if (authInfo) {
                 userDao.get(authInfo.uid).then((userData) => {
@@ -25,14 +50,19 @@ function AuthProvider({ children }: Props) {
             } else {
                 setAuthUser(undefined);
             }
+
+            setLoading(false);
         });
     }, []);
 
     const value = useMemo<AuthContextData>(
         () => ({
+            loading,
+            signIn,
+            signUp,
             user: authUser,
         }),
-        [authUser],
+        [authUser, loading, signIn],
     );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

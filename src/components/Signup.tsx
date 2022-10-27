@@ -11,9 +11,9 @@ import Box, { BoxProps } from '@mui/material/Box';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { UserType } from '../types';
-import { createUserWithEmailAndPassword } from '../api/auth';
 
 import { createFirebaseDao } from '../api/dao';
+import useAuthData from '../hooks/useAuthData';
 
 function Signup() {
     const navigate = useNavigate();
@@ -23,6 +23,7 @@ function Signup() {
     const [email, setEmail] = useState('');
     const [address, setAddress] = useState('');
     const [userType, setUserType] = useState<UserType>('senior');
+    const { signUp } = useAuthData();
 
     const validatePassword = () => !(password.trim() === '' || password.length < 8);
 
@@ -33,7 +34,7 @@ function Signup() {
     const handleSubmit: BoxProps['onSubmit'] = (event) => {
         event.preventDefault();
         if (validatePassword()) {
-            createUserWithEmailAndPassword(email, password)
+            signUp(email, password)
                 .then((registeredUser) => {
                     const user = createFirebaseDao('user');
                     const { uid } = registeredUser.user;
@@ -46,7 +47,7 @@ function Signup() {
                         userType,
                     });
 
-                    navigate('/');
+                    navigate('/signin');
                 })
                 .catch(() => {});
         }

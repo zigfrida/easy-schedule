@@ -6,17 +6,19 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword } from '../api/auth';
+
+import useAuthData from '../hooks/useAuthData';
 
 function Signin() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const { signIn } = useAuthData();
 
     const handleSignin: BoxProps['onSubmit'] = (event) => {
         event.preventDefault();
 
-        signInWithEmailAndPassword(email, password)
+        signIn(email, password)
             .then(() => {
                 navigate('/appointment');
             })

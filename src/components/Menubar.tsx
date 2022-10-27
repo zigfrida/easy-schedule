@@ -22,8 +22,13 @@ theme.typography.button = {
 };
 
 function Menubar() {
-    const { user } = useAuthData();
+    const { user, loading } = useAuthData();
     const navigate = useNavigate();
+
+    /* $FIXME: Maybe display a spinner if auth data is still loading? */
+    if (loading) {
+        return null;
+    }
 
     if (user) {
         return (
