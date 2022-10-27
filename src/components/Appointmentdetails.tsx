@@ -4,7 +4,8 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { createFirebaseDao } from '../api/dao';
+
+import { appointmentDao, userDao } from '../api/collections';
 import useAuthData from '../hooks/useAuthData';
 import Menubar from './Menubar';
 
@@ -12,42 +13,40 @@ function Appointmentdetails() {
     const [title, setTitle] = useState('');
     const [location, setLocation] = useState('');
     const [date, setDate] = useState('');
-    const [label, setLabel] = useState('');
     const [name, setName] = useState('');
 
     const { id } = useParams();
     const { user } = useAuthData();
 
-    async function getData() {
-        let userD;
-        const diamond = createFirebaseDao('appointment');
-
-        if (id) {
-            userD = await diamond.get(id);
-        }
-
-        setTitle(userD?.title);
-        setLocation(userD?.location);
-        setDate(userD?.date);
-
-        const getSN = createFirebaseDao('user');
-        if (user?.userType === 'nurse') {
-            setLabel('Senior');
-            const seniorName = await getSN.get(userD?.senior);
-            const sTotal = seniorName?.firstName.concat(' ', seniorName?.lastName);
-            setName(sTotal);
-        }
-        if (user?.userType === 'senior') {
-            setLabel('Nurse');
-            const nurseName = await getSN.get(userD?.nurse);
-            const nTotal = nurseName?.firstName.concat(' ', nurseName?.lastName);
-            setName(nTotal);
-        }
-    }
-
     useEffect(() => {
+        async function getData() {
+            if (!id) {
+                return;
+            }
+
+            const appointment = await appointmentDao.get(id);
+
+            if (!appointment) {
+                return;
+            }
+
+            setTitle(appointment?.title);
+            setLocation(appointment?.location);
+            setDate(appointment?.date);
+
+            const userId = user?.userType === 'nurse' ? appointment.senior : appointment.nurse;
+
+            const userData = await userDao.get(userId);
+            const userName = userData?.firstName.concat(' ', userData?.lastName);
+
+            if (userName) {
+                setName(userName);
+            }
+        }
         getData();
     }, []);
+
+    const label = user?.userType === 'nurse' ? 'Senior' : 'Nurse';
 
     return (
         <>

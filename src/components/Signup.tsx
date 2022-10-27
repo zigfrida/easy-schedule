@@ -12,7 +12,7 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { UserType } from '../types';
 
-import { createFirebaseDao } from '../api/dao';
+import { userDao } from '../api/collections';
 import useAuthData from '../hooks/useAuthData';
 
 function Signup() {
@@ -36,9 +36,8 @@ function Signup() {
         if (validatePassword()) {
             signUp(email, password)
                 .then((registeredUser) => {
-                    const user = createFirebaseDao('user');
                     const { uid } = registeredUser.user;
-                    user.add(uid, {
+                    userDao.add(uid, {
                         uid,
                         firstName,
                         lastName,

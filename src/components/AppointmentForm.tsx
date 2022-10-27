@@ -13,7 +13,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import dayjs, { Dayjs } from 'dayjs';
 import { v4 } from 'uuid';
-import { createFirebaseDao } from '../api/dao';
+
+import { appointmentDao, userDao } from '../api/collections';
 import useAuthData from '../hooks/useAuthData';
 import { NurseUser, Props } from '../types';
 
@@ -26,12 +27,10 @@ function AppointmentForm({ handleClose }: Props) {
     const [date, setDate] = useState<Dayjs | null>(dayjs());
 
     useEffect(() => {
-        createFirebaseDao<NurseUser>('user')
-            .getAll({ userType: 'nurse' })
-            .then((data) => {
-                setNursesList(data);
-                setNurse(data[0].uid);
-            });
+        userDao.getAll({ userType: 'nurse' }).then((data) => {
+            setNursesList(data);
+            setNurse(data[0].uid);
+        });
     }, []);
 
     const dateHandler = (newValue: Dayjs | null) => {
@@ -44,15 +43,17 @@ function AppointmentForm({ handleClose }: Props) {
 
     const handleSubmit: BoxProps['onSubmit'] = (event) => {
         event.preventDefault();
-        const appointment = createFirebaseDao('appointment');
         const id = v4();
-        appointment.add(id, {
+        appointmentDao.add(id, {
             uid: id,
             nurse,
             title,
             location,
-            date: date?.toString(),
-            senior: user?.uid,
+            // $FIXME: Is `date` ever going to be null?
+            date: date?.toString() as string,
+            // $FIXME: In theory, a user wouldn't even get to the appointment form
+            // if user is null
+            senior: user?.uid as string,
         });
         handleClose();
     };

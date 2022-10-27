@@ -15,7 +15,7 @@ import dayjs from 'dayjs';
 import AppointmentForm from './AppointmentForm';
 import Menubar from './Menubar';
 
-import { createFirebaseDao } from '../api/dao';
+import { appointmentDao } from '../api/collections';
 import useAuthData from '../hooks/useAuthData';
 import { Appointment } from '../types';
 
@@ -29,29 +29,17 @@ function Appointments() {
 
     useEffect(() => {
         if (user?.uid) {
-            if (user?.userType === 'nurse') {
-                createFirebaseDao<Appointment>('appointment')
-                    .getAll({ nurse: user?.uid })
-                    .then((data) => {
-                        const result = data.filter((obj) => {
-                            const appointmentDate = dayjs(obj.date);
-                            const today = dayjs();
-                            return appointmentDate.isAfter(today);
-                        });
-                        setAppointments(result);
-                    });
-            } else {
-                createFirebaseDao<Appointment>('appointment')
-                    .getAll({ senior: user?.uid })
-                    .then((data) => {
-                        const result = data.filter((obj) => {
-                            const appointmentDate = dayjs(obj.date);
-                            const today = dayjs();
-                            return appointmentDate.isAfter(today);
-                        });
-                        setAppointments(result);
-                    });
-            }
+            const filter =
+                user?.userType === 'nurse' ? { nurse: user?.uid } : { senior: user?.uid };
+
+            appointmentDao.subscribe((data) => {
+                const result = data.filter((obj) => {
+                    const appointmentDate = dayjs(obj.date);
+                    const today = dayjs();
+                    return appointmentDate.isAfter(today);
+                });
+                setAppointments(result);
+            }, filter);
         }
     }, [user?.uid]);
 
