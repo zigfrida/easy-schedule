@@ -4,7 +4,9 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from '@mui/material/';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
+import { signOut } from '../api/auth';
 import useAuthData from '../hooks/useAuthData';
 
 const theme = createTheme();
@@ -21,6 +23,7 @@ theme.typography.button = {
 
 function Menubar() {
     const { user } = useAuthData();
+    const navigate = useNavigate();
 
     if (user) {
         return (
@@ -30,19 +33,11 @@ function Menubar() {
                         <ThemeProvider theme={theme}>
                             <Button
                                 component={Link}
-                                to='/signup'
-                                color='inherit'
-                                sx={{ flexGrow: 1 }}
-                            >
-                                Home
-                            </Button>
-                            <Button
-                                component={Link}
                                 to='/appointment'
                                 color='inherit'
                                 sx={{ flexGrow: 1 }}
                             >
-                                View Appointments
+                                Home
                             </Button>
                             <Button color='inherit' sx={{ flexGrow: 1 }}>
                                 Chat
@@ -50,7 +45,15 @@ function Menubar() {
                             <Button color='inherit' sx={{ flexGrow: 1 }}>
                                 Profile
                             </Button>
-                            <Button color='inherit' sx={{ flexGrow: 1 }}>
+                            <Button
+                                color='inherit'
+                                sx={{ flexGrow: 1 }}
+                                onClick={() => {
+                                    signOut().then(() => {
+                                        navigate('/');
+                                    });
+                                }}
+                            >
                                 Logout
                             </Button>
                         </ThemeProvider>
