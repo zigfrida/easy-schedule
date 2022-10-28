@@ -8,10 +8,9 @@ export interface Props {
 }
 
 function ProtectedRoute({ children }: Props) {
-    const { user } = useAuthData();
+    const { authenticated } = useAuthData();
 
-    /* No user means the user is not authenticated  */
-    if (!user) {
+    if (!authenticated) {
         return <Navigate to='/' replace />;
     }
 

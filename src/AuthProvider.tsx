@@ -1,6 +1,11 @@
-import React, { ReactElement, useEffect, useMemo, useState } from 'react';
+import { User as FirebaseUser } from 'firebase/auth';
+import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { onAuthStateChanged } from './api/auth';
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+} from './api/auth';
 import { createFirebaseDao } from './api/dao';
 import AuthContext from './context/authContext';
 import { AuthContextData, User } from './types';
@@ -12,11 +17,35 @@ export interface Props {
 }
 
 function AuthProvider({ children }: Props) {
+    const [authenticated, setAuthenticated] = useState(false);
     const [authUser, setAuthUser] = useState<User>();
+    const [loading, setLoading] = useState(true);
+
+    const signIn: AuthContextData['signIn'] = useCallback((email, password) => {
+        setLoading(true);
+
+        return signInWithEmailAndPassword(email, password).then((user) => {
+            setLoading(false);
+            return user;
+        });
+    }, []);
+
+    const signUp: AuthContextData['signUp'] = useCallback((email, password) => {
+        setLoading(true);
+
+        return createUserWithEmailAndPassword(email, password).then((registeredUser) => {
+            setLoading(false);
+            return registeredUser;
+        });
+    }, []);
 
     useEffect(() => {
-        onAuthStateChanged((authInfo) => {
+        setLoading(true);
+
+        function fetchAuthUser(authInfo: FirebaseUser | null): void {
             if (authInfo) {
+                setAuthenticated(true);
+
                 userDao.get(authInfo.uid).then((userData) => {
                     if (userData) {
                         setAuthUser(userData);
@@ -24,15 +53,18 @@ function AuthProvider({ children }: Props) {
                 });
             } else {
                 setAuthUser(undefined);
+                setAuthenticated(false);
             }
-        });
+
+            setLoading(false);
+        }
+
+        onAuthStateChanged(fetchAuthUser);
     }, []);
 
     const value = useMemo<AuthContextData>(
-        () => ({
-            user: authUser,
-        }),
-        [authUser],
+        () => ({ authenticated, loading, signIn, signUp, user: authUser }),
+        [authUser, authenticated, loading, signIn],
     );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

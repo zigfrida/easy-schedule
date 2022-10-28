@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -13,26 +13,21 @@ import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import dayjs, { Dayjs } from 'dayjs';
 import { v4 } from 'uuid';
-import { createFirebaseDao } from '../api/dao';
+
+import { appointmentDao } from '../api/collections';
 import useAuthData from '../hooks/useAuthData';
-import { NurseUser, Props } from '../types';
+import useNursesList from '../hooks/useNursesList';
+import { Props } from '../types';
 
 function AppointmentForm({ handleClose }: Props) {
     const { user } = useAuthData();
-    const [nursesList, setNursesList] = useState<NurseUser[] | null>([]);
-    const [nurse, setNurse] = useState('');
+    const [nurse, setNurse] = useState<string>();
     const [title, setTitle] = useState('');
     const [location, setLocation] = useState('');
     const [date, setDate] = useState<Dayjs | null>(dayjs());
 
-    useEffect(() => {
-        createFirebaseDao<NurseUser>('user')
-            .getAll({ userType: 'nurse' })
-            .then((data) => {
-                setNursesList(data);
-                setNurse(data[0].uid);
-            });
-    }, []);
+    const [nursesList] = useNursesList();
+    const defaultNurse = nursesList[0].uid;
 
     const dateHandler = (newValue: Dayjs | null) => {
         setDate(newValue);
@@ -44,15 +39,17 @@ function AppointmentForm({ handleClose }: Props) {
 
     const handleSubmit: BoxProps['onSubmit'] = (event) => {
         event.preventDefault();
-        const appointment = createFirebaseDao('appointment');
         const id = v4();
-        appointment.add(id, {
+        appointmentDao.add(id, {
             uid: id,
-            nurse,
+            nurse: nurse || defaultNurse,
             title,
             location,
-            date: date?.toString(),
-            senior: user?.uid,
+            // $FIXME: Is `date` ever going to be null?
+            date: date?.toString() as string,
+            // $FIXME: In theory, a user wouldn't even get to the appointment form
+            // if user is null
+            senior: user?.uid as string,
         });
         handleClose();
     };
@@ -70,7 +67,7 @@ function AppointmentForm({ handleClose }: Props) {
                             required
                             labelId='demo-simple-select-label'
                             id='demo-simple-select'
-                            value={nurse}
+                            value={nurse || defaultNurse}
                             label='Nurse'
                             onChange={nurseHandler}
                         >

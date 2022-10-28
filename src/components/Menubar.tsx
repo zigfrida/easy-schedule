@@ -22,10 +22,15 @@ theme.typography.button = {
 };
 
 function Menubar() {
-    const { user } = useAuthData();
+    const { authenticated, loading } = useAuthData();
     const navigate = useNavigate();
 
-    if (user) {
+    /* $FIXME: Maybe display a spinner if auth data is still loading? */
+    if (loading) {
+        return null;
+    }
+
+    if (authenticated) {
         return (
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position='static'>
