@@ -36,7 +36,8 @@
         "format": "npx prettier --write src",
         "format-check": "npx prettier --check src",
         "type-check": "npx tsc --project .",
-        "check": "npm run lint && npm run format-check && npm run type-check"
+        "check": "npm run lint && npm run format-check && npm run type-check",
+        "cypress:open": "npx cypress open"
     },
     "eslintConfig": {
         "extends": [
@@ -61,6 +62,7 @@
         "@types/uuid": "^8.3.4",
         "@typescript-eslint/eslint-plugin": "^5.38.1",
         "@typescript-eslint/parser": "^5.38.1",
+        "cypress": "^10.11.0",
         "eslint": "^8.2.0",
         "eslint-config-airbnb": "19.0.4",
         "eslint-config-airbnb-typescript": "^17.0.0",
