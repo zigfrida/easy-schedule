@@ -17,8 +17,8 @@ describe('Create New Appointment', () => {
     it('create new appointment', () => {
         cy.contains('New Appointment').should('exist').click();
         cy.get('#demo-simple-select').click().get('li.MuiButtonBase-root:nth-child(10)').click();
-        cy.get('input#title').should('exist').type('laundry');
-        cy.get('input#location').should('exist').type('lily road, Surrey');
+        cy.get('input#title').should('exist').type('help with house cleaning');
+        cy.get('input#location').should('exist').type('star road, delta');
         cy.get('button.MuiButtonBase-root:nth-child(1) > svg:nth-child(1)')
             .click()
             .get('button.MuiIconButton-root:nth-child(3) > svg:nth-child(1)')
