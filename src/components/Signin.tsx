@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import Link from '@mui/material/Link';
 import useAuthData from '../hooks/useAuthData';
 
 function Signin() {
@@ -56,6 +56,11 @@ function Signin() {
                             variant='outlined'
                             onChange={(event) => setPassword(event.target.value)}
                         />
+                    </Grid>
+                    <Grid item xs={12} style={{ textAlign: 'center' }}>
+                        <Link href='/signup' variant='body2'>
+                            Don't have an account? Sign up
+                        </Link>
                     </Grid>
                 </Grid>
                 <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
