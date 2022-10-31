@@ -1,6 +1,6 @@
 import { SENIOR_EMAIL, COMMON_PASSWORD } from '../fixtures/credentials';
 
-describe('Authentication Test', () => {
+describe('Create New Appointment', () => {
     it('should successfully visit app', () => {
         cy.visit('https://easy-schedule-34f43.web.app/');
     });
@@ -15,21 +15,26 @@ describe('Authentication Test', () => {
         cy.contains('Appointments').should('exist');
     });
     it('create new appointment', () => {
-        cy.get('.MuiButton-contained').click();
-        // Should be back to the sign in page
-        // cy.get('input#demo-simple-select').should('exist').type();
+        cy.contains('New Appointment').should('exist').click();
         cy.get('#demo-simple-select').click().get('li.MuiButtonBase-root:nth-child(10)').click();
-        cy.get('input#title').should('exist').type('buy groceries');
-        cy.get('input#location').should('exist').type('flower road, vancouver');
-        //  cy.get('button.MuiButtonBase-root:nth-child(1) > svg:nth-child(1)').click();
-        // cy.contains('div.MuiDayPicker-weekContainer:nth-child(6) > button:nth-child(2)').click();
-        //cy.contains('31').should('exist').click({ force: true });
+        cy.get('input#title').should('exist').type('laundry');
+        cy.get('input#location').should('exist').type('lily road, Surrey');
+        cy.get('button.MuiButtonBase-root:nth-child(1) > svg:nth-child(1)')
+            .click()
+            .get('button.MuiIconButton-root:nth-child(3) > svg:nth-child(1)')
+            .click()
+            .get('div.MuiDayPicker-weekContainer:nth-child(1) > button:nth-child(3)')
+            .click()
+            .get('div.MuiPaper-root')
+            .click()
+            .get('.MuiClock-squareMask')
+            .click();
+        cy.contains('button', 'Schedule').should('exist').click();
+    });
+    it('should successfully log out the user', () => {
+        cy.contains('Logout').should('exist').click();
 
-        cy.get('.appointment-date-input')
-            .should('exist')
-            .type('10/31/2022 10:00 AM', { force: true });
-        cy.get('.MuiButton-containedSizeMedium').click();
-        // Should be inside the app
-        cy.contains('Appointments').should('exist');
+        // Should be back to the sign in page
+        cy.contains('Sign In').should('exist');
     });
 });
