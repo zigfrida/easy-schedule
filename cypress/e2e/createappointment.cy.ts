@@ -1,4 +1,3 @@
-import { endAt } from 'firebase/firestore';
 import { SENIOR_EMAIL, COMMON_PASSWORD } from '../fixtures/credentials';
 
 describe('Create New Appointment', () => {
