@@ -1,3 +1,4 @@
+import { endAt } from 'firebase/firestore';
 import { SENIOR_EMAIL, COMMON_PASSWORD } from '../fixtures/credentials';
 
 describe('Create New Appointment', () => {
@@ -17,8 +18,8 @@ describe('Create New Appointment', () => {
     it('create new appointment', () => {
         cy.contains('New Appointment').should('exist').click();
         cy.get('#demo-simple-select').click().get('li.MuiButtonBase-root:nth-child(10)').click();
-        cy.get('input#title').should('exist').type('help with house cleaning');
-        cy.get('input#location').should('exist').type('star road, delta');
+        cy.get('input#title').should('exist').type('help with cooking');
+        cy.get('input#location').should('exist').type('rainbow road, Richmond');
         cy.get('button.MuiButtonBase-root:nth-child(1) > svg:nth-child(1)')
             .click()
             .get('button.MuiIconButton-root:nth-child(3) > svg:nth-child(1)')
@@ -30,11 +31,6 @@ describe('Create New Appointment', () => {
             .get('.MuiClock-squareMask')
             .click();
         cy.contains('button', 'Schedule').should('exist').click();
-    });
-    it('should successfully log out the user', () => {
-        cy.contains('Logout').should('exist').click();
-
-        // Should be back to the sign in page
-        cy.contains('Sign In').should('exist');
+        cy.contains('Appointments').should('exist');
     });
 });
