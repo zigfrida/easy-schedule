@@ -117,6 +117,7 @@ function AppointmentForm({ handleClose }: Props) {
                         <Grid item xs={12}>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DateTimePicker
+                                    className='appointment-date-input'
                                     label='Date&Time picker'
                                     value={date}
                                     onChange={dateHandler}
