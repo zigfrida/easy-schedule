@@ -1,4 +1,4 @@
-import { SENIOR_EMAIL, COMMON_PASSWORD } from '../fixtures/credentials';
+import { COMMON_PASSWORD } from '../fixtures/credentials';
 
 describe('signup', () => {
     it('should successfully visit app', () => {
