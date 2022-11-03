@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import DeleteIcon from '@mui/icons-material/Delete';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -17,6 +18,8 @@ import Menubar from './Menubar';
 
 import useAuthData from '../hooks/useAuthData';
 import useAppointments from '../hooks/useAppointments';
+
+import { appointmentDao } from '../api/collections';
 
 function Appointments() {
     const { user } = useAuthData();
@@ -35,6 +38,10 @@ function Appointments() {
         active: Boolean(user),
         filter: appointmentFilter,
     });
+
+    const handleDelete = (uid: string) => {
+        appointmentDao.remove(uid);
+    };
 
     const style = {
         position: 'absolute',
@@ -86,10 +93,7 @@ function Appointments() {
 
                 <Box alignItems='center'>
                     {appointments?.map((item) => (
-                        <Card
-                            sx={{ maxWidth: 345, mb: 2 }}
-                            onClick={() => navigate(`/appointment/${item.uid}`)}
-                        >
+                        <Card key={item.uid} sx={{ maxWidth: 345, mb: 2 }}>
                             <CardContent>
                                 <Typography gutterBottom variant='h5' component='div'>
                                     {item.title}
@@ -109,6 +113,13 @@ function Appointments() {
                                     onClick={() => navigate(`/appointment/${item.uid}`)}
                                 >
                                     View Appointment
+                                </Button>
+                                <Button
+                                    size='small'
+                                    style={{ color: 'red', marginLeft: 'auto' }}
+                                    onClick={() => handleDelete(item.uid)}
+                                >
+                                    <DeleteIcon />
                                 </Button>
                             </CardActions>
                         </Card>
