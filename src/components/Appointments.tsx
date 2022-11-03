@@ -1,14 +1,15 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import AppointmentForm from './AppointmentForm';
@@ -66,69 +67,53 @@ function Appointments() {
                     <Typography variant='h4' gutterBottom style={{ flex: 1 }}>
                         Appointments
                     </Typography>
-                    <Button
-                        variant='contained'
-                        size='small'
-                        startIcon={<CalendarMonthIcon />}
-                        onClick={handleOpen}
-                        style={{
-                            maxHeight: '40px',
-                            float: 'right',
-                            fontSize: '11px',
-                        }}
-                    >
-                        New Appointment
-                    </Button>
+                    {user?.userType === 'senior' && (
+                        <Button
+                            variant='contained'
+                            size='small'
+                            startIcon={<CalendarMonthIcon />}
+                            onClick={handleOpen}
+                            style={{
+                                maxHeight: '40px',
+                                float: 'right',
+                                fontSize: '11px',
+                            }}
+                        >
+                            New Appointment
+                        </Button>
+                    )}
                 </Stack>
 
-                {appointments?.map((item) => (
-                    <Box
-                        key={item.uid}
-                        sx={{ flexGrow: 1, marginTop: 2 }}
-                        onClick={() => navigate(`/appointment/${item.uid}`)}
-                    >
-                        <Stack direction='row' spacing={2} sx={{ marginTop: 1, marginBottom: 1 }}>
-                            <CalendarMonthIcon />
-                            <Typography
-                                variant='body2'
-                                color='text.primary'
-                                component='span'
-                                gutterBottom
-                                style={{ flex: 1 }}
-                            >
-                                {item.title}
-                            </Typography>
-                            <AccountCircleIcon />
-                            <Typography
-                                variant='body2'
-                                color='text.primary'
-                                gutterBottom
-                                style={{ flex: 1 }}
-                            >
-                                {item.nurse}
-                            </Typography>
-                            <LocationOnIcon />
-                            <Typography
-                                variant='body2'
-                                color='text.primary'
-                                gutterBottom
-                                style={{ flex: 1 }}
-                            >
-                                {item.location}
-                            </Typography>
-                            <AccessTimeIcon />
-                            <Typography
-                                variant='body2'
-                                color='text.primary'
-                                gutterBottom
-                                style={{ flex: 1 }}
-                            >
-                                {item.date}
-                            </Typography>
-                        </Stack>
-                        <Divider />
-                    </Box>
-                ))}
+                <Box alignItems='center'>
+                    {appointments?.map((item) => (
+                        <Card
+                            sx={{ maxWidth: 345, mb: 2 }}
+                            onClick={() => navigate(`/appointment/${item.uid}`)}
+                        >
+                            <CardContent>
+                                <Typography gutterBottom variant='h5' component='div'>
+                                    {item.title}
+                                </Typography>
+                                <Typography variant='subtitle1' color='text.secondary'>
+                                    <AccessTimeIcon />
+                                    {item.date}
+                                </Typography>
+                                <Typography variant='body1' color='text.secondary'>
+                                    <LocationOnIcon />
+                                    {item.location}
+                                </Typography>
+                            </CardContent>
+                            <CardActions>
+                                <Button
+                                    size='small'
+                                    onClick={() => navigate(`/appointment/${item.uid}`)}
+                                >
+                                    View Appointment
+                                </Button>
+                            </CardActions>
+                        </Card>
+                    ))}
+                </Box>
             </Container>
         </div>
     );
