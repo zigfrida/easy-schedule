@@ -15,23 +15,23 @@ for (let i = 0; i < 10; i++) {
             cy.contains('Appointments').should('exist');
         });
         it('create new appointment', () => {
-            cy.contains('New Appointment').should('exist').click();
+            cy.contains('New Appointment').should('exist').click({ force: true });
             cy.get('#demo-simple-select')
-                .click()
+                .click({ force: true })
                 .get('li.MuiButtonBase-root:nth-child(10)')
-                .click();
+                .click({ force: true });
             cy.get('input#title').should('exist').type('help with laundry');
             cy.get('input#location').should('exist').type('1123 star ave, Richmond');
             cy.get('button.MuiButtonBase-root:nth-child(1) > svg:nth-child(1)')
-                .click()
+                .click({ force: true })
                 .get('div.MuiDayPicker-weekContainer:nth-child(2) > button:nth-child(6)')
-                .click()
+                .click({ force: true })
                 .get('div.MuiPaper-root')
                 .click({ force: true })
                 .get('.MuiClock-squareMask')
                 .click({ force: true });
             // cy.wait(2000);
-            cy.contains('button', 'Schedule').should('exist').click();
+            cy.contains('button', 'Schedule').should('exist').click({ force: true });
             cy.contains('Appointments').should('exist');
             cy.wait(2000);
             // Check if the appointment details are displayed on the list
