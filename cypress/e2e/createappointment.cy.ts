@@ -17,7 +17,7 @@ describe('Create New Appointment', () => {
     it('create new appointment', () => {
         cy.contains('New Appointment').should('exist').click();
         cy.get('#demo-simple-select').click().get('li.MuiButtonBase-root:nth-child(10)').click();
-        cy.get('input#title').should('exist').type('help with food prep');
+        cy.get('input#title').should('exist').type('help with laundry');
         cy.get('input#location').should('exist').type('1123 star ave, Richmond');
         cy.get('button.MuiButtonBase-root:nth-child(1) > svg:nth-child(1)')
             .click()
@@ -32,7 +32,7 @@ describe('Create New Appointment', () => {
         cy.contains('Appointments').should('exist');
         cy.wait(2000);
         // Check if the appointment details are displayed on the list
-        cy.contains('help with food prep').should('exist');
+        cy.contains('help with laundry').should('exist');
         cy.contains('1123 star ave, Richmond').should('exist');
     });
     it('successfully view appointment details', () => {
