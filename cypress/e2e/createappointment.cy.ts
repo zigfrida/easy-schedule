@@ -37,9 +37,8 @@ describe('Create New Appointment', () => {
     });
     it('successfully view appointment details', () => {
         cy.get('div.MuiBox-root:nth-child(2) > div:nth-child(1)').click();
-        cy.wait(1000);
+
         cy.contains('Home').should('exist').click();
-        cy.wait(1000);
     });
     it('should successfully log out the user', () => {
         cy.contains('Logout').should('exist').click();
