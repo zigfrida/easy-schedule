@@ -27,9 +27,9 @@ for (let i = 0; i < 10; i++) {
                 .get('div.MuiDayPicker-weekContainer:nth-child(2) > button:nth-child(6)')
                 .click()
                 .get('div.MuiPaper-root')
-                .click()
+                .click({ force: true })
                 .get('.MuiClock-squareMask')
-                .click();
+                .click({ force: true });
             // cy.wait(2000);
             cy.contains('button', 'Schedule').should('exist').click();
             cy.contains('Appointments').should('exist');
