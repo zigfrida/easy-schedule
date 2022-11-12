@@ -24,7 +24,7 @@ describe('Create New Appointment', () => {
         cy.get('input#location').should('exist').type('1123 star ave, Richmond');
         cy.get('button.MuiButtonBase-root:nth-child(1) > svg:nth-child(1)')
             .click({ multiple: true })
-            .get('div.MuiDayPicker-weekContainer:nth-child(2) > button:nth-child(6)')
+            .get('div.MuiDayPicker-weekContainer:nth-child(3) > button:nth-child(6)')
             .click({ multiple: true })
             .get('div.MuiPaper-root')
             .click({ multiple: true, force: true });
