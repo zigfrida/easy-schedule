@@ -1,3 +1,4 @@
+import { text } from 'stream/consumers';
 import { SENIOR_EMAIL, COMMON_PASSWORD } from '../fixtures/credentials';
 //for (let i = 0; i < 10; i++) {
 describe('Create New Appointment', () => {
@@ -15,21 +16,31 @@ describe('Create New Appointment', () => {
         cy.contains('Appointments').should('exist');
     });
     it('delete appointment', () => {
-        let text;
-        cy.get('div.MuiPaper-root:nth-child(1) > div:nth-child(1) > div:nth-child(1)').should(
-            ($div) => {
-                text = $div.text();
-            },
-        );
-        cy.get('div.MuiPaper-root:nth-child(1) > div:nth-child(2) > button:nth-child(2)')
-            .should('exist')
-            .click();
-        cy.contains(
-            'div.MuiPaper-root:nth-child(1) > div:nth-child(2) > button:nth-child(2)',
-            text,
-        ).should('not.exist');
-        // cy.contains('help with laundry').should('exist');
-        // cy.contains('1123 star ave, Richmond').should('exist');
+        cy.get('body')
+            .then(($body) => {
+                if (
+                    $body.find(
+                        'div.MuiPaper-root:nth-child(1) > div:nth-child(1) > div:nth-child(1)',
+                    ).length
+                ) {
+                    return 'div.MuiPaper-root:nth-child(1) > div:nth-child(1) > div:nth-child(1)';
+                }
+                return 'div.MuiPaper-root:nth-child(1) > div:nth-child(1) > div:nth-child(1)';
+            })
+            .then((selector) => {
+                cy.get(selector);
+
+                cy.get(selector).should(($div) => {
+                    const text = $div.text();
+                });
+                cy.get('div.MuiPaper-root:nth-child(1) > div:nth-child(2) > button:nth-child(2)')
+                    .should('exist')
+                    .click();
+
+                // cy.get('div.MuiPaper-root:nth-child(1) > div:nth-child(2) > button:nth-child(2)')
+                //     .should('have.value', text)
+                //     .should('not.exist');
+            });
     });
     it('should successfully log out the user', () => {
         cy.contains('Logout').should('exist').click();
@@ -38,4 +49,18 @@ describe('Create New Appointment', () => {
         cy.contains('Sign In').should('exist');
     });
 });
+
 //}
+
+//    cy.get('div.MuiPaper-root:nth-child(1) > div:nth-child(1) > div:nth-child(1)').should(
+//         ($div) => {
+//             text = $div.text();
+//         },
+//     );
+//     cy.get('div.MuiPaper-root:nth-child(1) > div:nth-child(2) > button:nth-child(2)')
+//         .should('exist')
+//         .click();
+//     cy.contains(
+//         'div.MuiPaper-root:nth-child(1) > div:nth-child(2) > button:nth-child(2)',
+//         text,
+//     ).should('not.exist');
