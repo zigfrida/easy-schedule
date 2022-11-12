@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -23,6 +24,7 @@ function Signup() {
     const [email, setEmail] = useState('');
     const [address, setAddress] = useState('');
     const [userType, setUserType] = useState<UserType>('senior');
+    const [errMsg, setErrorMsg] = useState('');
     const { signUp } = useAuthData();
 
     const validatePassword = () => !(password.trim() === '' || password.length < 8);
@@ -48,7 +50,13 @@ function Signup() {
 
                     navigate('/signin');
                 })
-                .catch(() => {});
+                .catch((e) => {
+                    setErrorMsg(`Registration failed. Please try again. ${e}`);
+                });
+        } else {
+            setErrorMsg(
+                'Registration failed. Enter a password that is more than eight characters.',
+            );
         }
     };
 
@@ -142,6 +150,16 @@ function Signup() {
                     </Grid>
                 </Grid>
             </Box>
+            {errMsg && (
+                <Alert
+                    style={{ marginTop: '10px' }}
+                    variant='outlined'
+                    severity='error'
+                    onClose={() => setErrorMsg('')}
+                >
+                    {errMsg}
+                </Alert>
+            )}
         </Container>
     );
 }
