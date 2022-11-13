@@ -27,11 +27,11 @@ describe('Create New Appointment', () => {
             .get('div.MuiDayPicker-weekContainer:nth-child(3) > button:nth-child(6)')
             .click({ multiple: true })
             .get('div.MuiPaper-root')
+            .click({ multiple: true, force: true })
+            .get('.MuiClock-clock')
             .click({ multiple: true, force: true });
-        // .get('.MuiClock-clock')
-        // .click({ multiple: true });
         // cy.wait(2000);
-        cy.contains('button', 'Schedule').should('exist').click({ multiple: true });
+        cy.contains('button', 'Schedule').should('exist').click({ multiple: true, force: true });
         cy.contains('Appointments').should('exist');
         //  cy.wait(2000);
         // Check if the appointment details are displayed on the list
