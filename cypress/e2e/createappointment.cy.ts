@@ -1,5 +1,5 @@
 import { SENIOR_EMAIL, COMMON_PASSWORD } from '../fixtures/credentials';
-
+//for (let i = 0; i < 10; i++) {
 describe('Create New Appointment', () => {
     it('should successfully visit app', () => {
         cy.visit('https://easy-schedule-34f43.web.app/');
@@ -15,28 +15,31 @@ describe('Create New Appointment', () => {
         cy.contains('Appointments').should('exist');
     });
     it('create new appointment', () => {
-        cy.contains('New Appointment').should('exist').click();
-        cy.get('#demo-simple-select').click().get('li.MuiButtonBase-root:nth-child(10)').click();
+        cy.contains('New Appointment').should('exist').click({ multiple: true });
+        cy.get('#demo-simple-select')
+            .click()
+            .get('li.MuiButtonBase-root:nth-child(10)')
+            .click({ multiple: true });
         cy.get('input#title').should('exist').type('help with laundry');
         cy.get('input#location').should('exist').type('1123 star ave, Richmond');
         cy.get('button.MuiButtonBase-root:nth-child(1) > svg:nth-child(1)')
-            .click()
-            .get('div.MuiDayPicker-weekContainer:nth-child(2) > button:nth-child(6)')
-            .click()
+            .click({ multiple: true })
+            .get('div.MuiDayPicker-weekContainer:nth-child(3) > button:nth-child(6)')
+            .click({ multiple: true })
             .get('div.MuiPaper-root')
-            .click()
-            .get('.MuiClock-squareMask')
-            .click();
+            .click({ multiple: true, force: true });
+        // .get('.MuiClock-clock')
+        // .click({ multiple: true });
         // cy.wait(2000);
-        cy.contains('button', 'Schedule').should('exist').click();
+        cy.contains('button', 'Schedule').should('exist').click({ multiple: true });
         cy.contains('Appointments').should('exist');
-        cy.wait(2000);
+        //  cy.wait(2000);
         // Check if the appointment details are displayed on the list
         cy.contains('help with laundry').should('exist');
         cy.contains('1123 star ave, Richmond').should('exist');
     });
     it('successfully view appointment details', () => {
-        cy.get('div.MuiBox-root:nth-child(2) > div:nth-child(1)').click();
+        cy.get('div.MuiPaper-root:nth-child(1) > div:nth-child(2) > button:nth-child(1)').click();
         cy.wait(1000);
         cy.contains('Home').should('exist').click();
         cy.wait(1000);
@@ -48,3 +51,4 @@ describe('Create New Appointment', () => {
         cy.contains('Sign In').should('exist');
     });
 });
+//}
