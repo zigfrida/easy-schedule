@@ -39,7 +39,7 @@ describe('Create New Appointment', () => {
         cy.contains('1123 star ave, Richmond').should('exist');
     });
     it('successfully view appointment details', () => {
-        cy.get('div.MuiPaper-root:nth-child(1) > div:nth-child(1)').click();
+        cy.get('div.MuiPaper-root:nth-child(1) > div:nth-child(2) > button:nth-child(1)').click();
         cy.wait(1000);
         cy.contains('Home').should('exist').click();
         cy.wait(1000);
