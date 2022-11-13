@@ -17,12 +17,7 @@ describe('Create New Appointment', () => {
     });
     it('delete appointment', () => {
         cy.get('body').then(($body) => {
-            if (
-                $body
-                    .parent()
-                    .find('div.MuiPaper-root:nth-child(1) > div:nth-child(2) > button:nth-child(2)')
-                    .length
-            ) {
+            if ($body.parent().find('CardContent').length > 0) {
                 console.log('element found');
             } //
         });
