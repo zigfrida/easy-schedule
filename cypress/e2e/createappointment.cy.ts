@@ -41,6 +41,15 @@ describe('Create New Appointment', () => {
         cy.contains('Home').should('exist').click();
         cy.wait(1000);
     });
+    it('successfully delete appointment', () => {
+        cy.get('button').then(($a) => {
+            if ($a.children('svg')) {
+                const sele = 'button[type="button"]>svg';
+                console.log('5th element');
+                cy.get(sele).first().click({ multiple: true });
+            }
+        });
+    });
     it('should successfully log out the user', () => {
         cy.contains('Logout').should('exist').click();
 
