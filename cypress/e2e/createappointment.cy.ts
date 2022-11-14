@@ -1,7 +1,4 @@
-import { elementAcceptingRef } from '@mui/utils';
-import { data } from 'cypress/types/jquery';
 import { SENIOR_EMAIL, COMMON_PASSWORD } from '../fixtures/credentials';
-//for (let i = 0; i < 10; i++) {
 describe('Create New Appointment', () => {
     it('should successfully visit app', () => {
         cy.visit('https://easy-schedule-34f43.web.app/');
@@ -22,7 +19,9 @@ describe('Create New Appointment', () => {
             .click()
             .get('li.MuiButtonBase-root:nth-child(10)')
             .click({ multiple: true });
-        cy.get('input#title').should('exist').type('help with gardening');
+        const timeNow = new Date().getTime();
+        console.log(timeNow);
+        cy.get('input#title').should('exist').type('help with groceries ').type(timeNow.toString());
         cy.get('input#location').should('exist').type('1123 star ave, Richmond');
         cy.get('button.MuiButtonBase-root:nth-child(1) > svg:nth-child(1)');
         cy.get('input[placeholder="mm/dd/yyyy hh:mm (a|p)m"]')
@@ -32,30 +31,27 @@ describe('Create New Appointment', () => {
 
         cy.contains('button', 'Schedule').should('exist').click({ multiple: true });
         cy.contains('Appointments').should('exist');
-        //  cy.wait(2000);
+
         // Check if the appointment details are displayed on the list
         cy.contains('help with gardening').should('exist');
         cy.contains('1123 star ave, Richmond').should('exist');
     });
     it('successfully view appointment details', () => {
-        cy.get('div.MuiPaper-root:nth-child(1) > div:nth-child(2) > button:nth-child(1)').click();
+        cy.contains('View Appointment').first().should('exist').click();
         cy.wait(1000);
         cy.contains('Home').should('exist').click();
-        cy.wait(1000);
     });
     it('successfully delete appointment', () => {
         cy.get('button').then(($a) => {
             if ($a.children('svg')) {
                 const del = 'button[type="button"]>svg';
-                cy.get('h6')
+                cy.get('[class*="css-t1nuxs"]')
                     .first()
                     .then(function ($x) {
-                        console.log($x.text());
-                        const dateNow = new Date().getTime();
-                        console.log(dateNow);
                         const data1 = $x.text();
                         cy.get(del).first().click({ multiple: true });
-                        //cy.get('h6').first().contains(data1).should('not.exist');
+                        //check if the appointment is deleted or not
+                        cy.get('[class*="css-t1nuxs"]').first().contains(data1).should('not.exist');
                     });
             }
         });
