@@ -20,22 +20,19 @@ describe('Create New Appointment', () => {
             .click()
             .get('li.MuiButtonBase-root:nth-child(10)')
             .click({ multiple: true });
-        cy.get('input#title').should('exist').type('help with laundry');
+        cy.get('input#title').should('exist').type('help with gardening');
         cy.get('input#location').should('exist').type('1123 star ave, Richmond');
-        cy.get('button.MuiButtonBase-root:nth-child(1) > svg:nth-child(1)')
-            .click({ multiple: true })
-            .get('div.MuiDayPicker-weekContainer:nth-child(3) > button:nth-child(6)')
-            .click({ multiple: true })
-            .get('div.MuiPaper-root')
-            .click({ multiple: true, force: true });
-        // .get('.MuiClock-clock')
-        // .click({ multiple: true });
-        // cy.wait(2000);
+        cy.get('button.MuiButtonBase-root:nth-child(1) > svg:nth-child(1)');
+        cy.get('input[placeholder="mm/dd/yyyy hh:mm (a|p)m"]')
+            .should('exist')
+            .clear()
+            .type('11/16/2022 02:30 PM');
+
         cy.contains('button', 'Schedule').should('exist').click({ multiple: true });
         cy.contains('Appointments').should('exist');
         //  cy.wait(2000);
         // Check if the appointment details are displayed on the list
-        cy.contains('help with laundry').should('exist');
+        cy.contains('help with gardening').should('exist');
         cy.contains('1123 star ave, Richmond').should('exist');
     });
     it('successfully view appointment details', () => {
