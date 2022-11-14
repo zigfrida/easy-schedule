@@ -2,5 +2,9 @@
 import { defineConfig } from 'cypress';
 
 export default defineConfig({
-    e2e: {},
+    e2e: {
+        // Simulating iphone xr viewports
+        viewportHeight: 896,
+        viewportWidth: 414,
+    },
 });

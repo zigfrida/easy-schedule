@@ -16,6 +16,7 @@ describe('Create New Appointment', () => {
         cy.contains('Appointments').should('exist');
     });
     it('delete appointment', () => {
+<<<<<<< HEAD
         cy.get('body')
             .then(($body) => {
                 if (
@@ -41,6 +42,13 @@ describe('Create New Appointment', () => {
                 //     .should('have.value', text)
                 //     .should('not.exist');
             });
+=======
+        cy.get('body').then(($body) => {
+            if ($body.parent().find('CardContent').length > 0) {
+                console.log('element found');
+            } //
+        });
+>>>>>>> main
     });
     it('should successfully log out the user', () => {
         cy.contains('Logout').should('exist').click();
