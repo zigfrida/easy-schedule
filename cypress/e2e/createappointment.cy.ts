@@ -1,4 +1,5 @@
 import { SENIOR_EMAIL, COMMON_PASSWORD } from '../fixtures/credentials';
+
 describe('Create New Appointment', () => {
     it('should successfully visit app', () => {
         cy.visit('https://easy-schedule-34f43.web.app/');
@@ -20,14 +21,13 @@ describe('Create New Appointment', () => {
             .get('li.MuiButtonBase-root:nth-child(10)')
             .click({ multiple: true });
         const timeNow = new Date().getTime();
-        console.log(timeNow);
         cy.get('input#title').should('exist').type('help with groceries ').type(timeNow.toString());
         cy.get('input#location').should('exist').type('1123 star ave, Richmond');
         cy.get('button.MuiButtonBase-root:nth-child(1) > svg:nth-child(1)');
         cy.get('input[placeholder="mm/dd/yyyy hh:mm (a|p)m"]')
             .should('exist')
             .clear()
-            .type('11/16/2022 03:00 PM');
+            .type('11/29/2022 03:00 PM');
 
         cy.contains('button', 'Schedule').should('exist').click({ multiple: true });
         cy.contains('Appointments').should('exist');
@@ -47,10 +47,10 @@ describe('Create New Appointment', () => {
                 const del = 'button[type="button"]>svg';
                 cy.get('[class*="css-t1nuxs"]')
                     .first()
-                    .then(function ($x) {
+                    .then(($x) => {
                         const data1 = $x.text();
                         cy.get(del).first().click({ multiple: true });
-                        //check if the appointment is deleted or not
+                        // check if the appointment is deleted or not
                         cy.get('[class*="css-t1nuxs"]').first().contains(data1).should('not.exist');
                     });
             }

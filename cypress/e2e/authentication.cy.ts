@@ -1,4 +1,5 @@
 import { SENIOR_EMAIL, COMMON_PASSWORD } from '../fixtures/credentials';
+
 describe('Authentication Test', () => {
     it('should successfully visit app', () => {
         cy.visit('https://easy-schedule-34f43.web.app/');

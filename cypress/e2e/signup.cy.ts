@@ -1,4 +1,5 @@
 import { COMMON_PASSWORD } from '../fixtures/credentials';
+
 describe('signup', () => {
     it('should successfully visit app', () => {
         cy.visit('https://easy-schedule-34f43.web.app/signup');
