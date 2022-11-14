@@ -1,3 +1,5 @@
+import { elementAcceptingRef } from '@mui/utils';
+import { data } from 'cypress/types/jquery';
 import { SENIOR_EMAIL, COMMON_PASSWORD } from '../fixtures/credentials';
 //for (let i = 0; i < 10; i++) {
 describe('Create New Appointment', () => {
@@ -26,7 +28,7 @@ describe('Create New Appointment', () => {
         cy.get('input[placeholder="mm/dd/yyyy hh:mm (a|p)m"]')
             .should('exist')
             .clear()
-            .type('11/16/2022 02:30 PM');
+            .type('11/16/2022 03:00 PM');
 
         cy.contains('button', 'Schedule').should('exist').click({ multiple: true });
         cy.contains('Appointments').should('exist');
@@ -44,9 +46,17 @@ describe('Create New Appointment', () => {
     it('successfully delete appointment', () => {
         cy.get('button').then(($a) => {
             if ($a.children('svg')) {
-                const sele = 'button[type="button"]>svg';
-                console.log('5th element');
-                cy.get(sele).first().click({ multiple: true });
+                const del = 'button[type="button"]>svg';
+                cy.get('h6')
+                    .first()
+                    .then(function ($x) {
+                        console.log($x.text());
+                        const dateNow = new Date().getTime();
+                        console.log(dateNow);
+                        const data1 = $x.text();
+                        cy.get(del).first().click({ multiple: true });
+                        //cy.get('h6').first().contains(data1).should('not.exist');
+                    });
             }
         });
     });
@@ -57,4 +67,3 @@ describe('Create New Appointment', () => {
         cy.contains('Sign In').should('exist');
     });
 });
-//}
