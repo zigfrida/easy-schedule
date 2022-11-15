@@ -2,7 +2,7 @@ import { SENIOR_EMAIL, COMMON_PASSWORD } from '../fixtures/credentials';
 
 describe('Create New Appointment', () => {
     const timeNow = new Date().getTime().toString();
-    const APPOINTMENT_TITLE = 'help with groceries ' + timeNow;
+    const APPOINTMENT_TITLE = `help with groceries ${timeNow}`;
 
     it('should successfully visit app', () => {
         cy.visit('https://easy-schedule-34f43.web.app/');
@@ -47,7 +47,7 @@ describe('Create New Appointment', () => {
     it('successfully delete appointment', () => {
         cy.contains(APPOINTMENT_TITLE).parent().parent().find('[data-testid="DeleteIcon"]').click();
 
-        //check if deleted appointment exists
+        // check if deleted appointment exists
 
         cy.contains(APPOINTMENT_TITLE).should('not.exist');
     });
