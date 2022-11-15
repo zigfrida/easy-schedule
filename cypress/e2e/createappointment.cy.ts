@@ -2,6 +2,7 @@ import { SENIOR_EMAIL, COMMON_PASSWORD } from '../fixtures/credentials';
 
 describe('Create New Appointment', () => {
     const timeNow = new Date().getTime().toString();
+    const APPOINTMENT_TITLE = 'help with groceries ' + timeNow;
 
     it('should successfully visit app', () => {
         cy.visit('https://easy-schedule-34f43.web.app/');
@@ -23,7 +24,7 @@ describe('Create New Appointment', () => {
             .get('li.MuiButtonBase-root:nth-child(10)')
             .click({ multiple: true });
 
-        cy.get('input#title').should('exist').type('help with groceries ').type(timeNow);
+        cy.get('input#title').should('exist').type(APPOINTMENT_TITLE);
         cy.get('input#location').should('exist').type('1123 star ave, Richmond');
         cy.get('button.MuiButtonBase-root:nth-child(1) > svg:nth-child(1)');
         cy.get('input[placeholder="mm/dd/yyyy hh:mm (a|p)m"]')
@@ -35,7 +36,7 @@ describe('Create New Appointment', () => {
         cy.contains('Appointments').should('exist');
 
         // Check if the appointment details are displayed on the list
-        cy.contains('help with groceries ' + timeNow).should('exist');
+        cy.contains(APPOINTMENT_TITLE).should('exist');
         cy.contains('1123 star ave, Richmond').should('exist');
     });
     it('successfully view appointment details', () => {
@@ -44,7 +45,6 @@ describe('Create New Appointment', () => {
         cy.contains('Home').should('exist').click();
     });
     it('successfully delete appointment', () => {
-        const APPOINTMENT_TITLE = 'help with groceries ' + timeNow;
         console.log(APPOINTMENT_TITLE);
 
         cy.contains(APPOINTMENT_TITLE).parent().parent().find('[data-testid="DeleteIcon"]').click();
@@ -52,20 +52,6 @@ describe('Create New Appointment', () => {
         //check if deleted appointment exists
 
         cy.contains(APPOINTMENT_TITLE).should('not.exist');
-
-        // cy.get('button').then(($a) => {
-        //     if ($a.children('svg')) {
-        //         const del = 'button[type="button"]>svg';
-        //         cy.get('[class*="css-t1nuxs"]')
-        //             .first()
-        //             .then(($x) => {
-        //                 const data1 = $x.text();
-        //                 cy.get(del).first().click({ multiple: true });
-        //                 // check if the appointment is deleted or not
-        //                 cy.get('[class*="css-t1nuxs"]').first().contains(data1).should('not.exist');
-        //             });
-        //     }
-        // });
     });
     it('should successfully log out the user', () => {
         cy.contains('Logout').should('exist').click();
