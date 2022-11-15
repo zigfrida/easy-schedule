@@ -45,8 +45,6 @@ describe('Create New Appointment', () => {
         cy.contains('Home').should('exist').click();
     });
     it('successfully delete appointment', () => {
-        console.log(APPOINTMENT_TITLE);
-
         cy.contains(APPOINTMENT_TITLE).parent().parent().find('[data-testid="DeleteIcon"]').click();
 
         //check if deleted appointment exists
