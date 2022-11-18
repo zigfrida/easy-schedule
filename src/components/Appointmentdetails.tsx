@@ -1,22 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Box from '@mui/material/Box';
+import Box, { BoxProps } from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-
+import Snackbar from '@mui/material/Snackbar';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import { appointmentDao, userDao } from '../api/collections';
 import useAuthData from '../hooks/useAuthData';
 import Menubar from './Menubar';
+import { Appointment } from '../types';
 
 function Appointmentdetails() {
+    const [appointment, setAppointment] = useState<Appointment>();
     const [title, setTitle] = useState('');
     const [location, setLocation] = useState('');
     const [date, setDate] = useState('');
     const [name, setName] = useState('');
+    const [notes, setNotes] = useState<string | ''>();
+    const [updateStatus, setUpdateStatus] = useState(false);
 
     const { id } = useParams();
     const { user } = useAuthData();
+
+    const handleSubmit: BoxProps['onSubmit'] = (event) => {
+        event.preventDefault();
+        if (appointment) {
+            appointmentDao.update(appointment.uid, {
+                ...appointment,
+                notes,
+            });
+            setUpdateStatus(true);
+        }
+    };
+
+    const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setUpdateStatus(false);
+    };
+
+    const action = (
+        <IconButton size='small' aria-label='close' color='inherit' onClick={handleClose}>
+            <CloseIcon fontSize='small' />
+        </IconButton>
+    );
 
     useEffect(() => {
         async function getData() {
@@ -24,17 +55,21 @@ function Appointmentdetails() {
                 return;
             }
 
-            const appointment = await appointmentDao.get(id);
+            const appointmentDetails = await appointmentDao.get(id);
 
-            if (!appointment) {
+            if (!appointmentDetails) {
                 return;
             }
 
-            setTitle(appointment?.title);
-            setLocation(appointment?.location);
-            setDate(appointment?.date);
+            setTitle(appointmentDetails?.title);
+            setLocation(appointmentDetails?.location);
+            setDate(appointmentDetails?.date);
+            setNotes(appointmentDetails?.notes);
 
-            const userId = user?.userType === 'nurse' ? appointment.senior : appointment.nurse;
+            const userId =
+                user?.userType === 'nurse' ? appointmentDetails.senior : appointmentDetails.nurse;
+
+            setAppointment(appointmentDetails);
 
             const userData = await userDao.get(userId);
             const userName = userData?.firstName.concat(' ', userData?.lastName);
@@ -53,7 +88,6 @@ function Appointmentdetails() {
             <Menubar />
             <Container
                 style={{
-                    display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
                     height: '60vh',
@@ -62,6 +96,7 @@ function Appointmentdetails() {
                 <Box
                     component='form'
                     className='login'
+                    onSubmit={handleSubmit}
                     style={{
                         display: 'flex',
                         flexDirection: 'column',
@@ -110,8 +145,37 @@ function Appointmentdetails() {
                             readOnly: true,
                         }}
                     />
+                    <TextField
+                        value={notes}
+                        onChange={(e) => setNotes(e.target.value)}
+                        multiline
+                        rows={4}
+                        id='notes'
+                        label='Notes'
+                    />
+                    <Button
+                        type='submit'
+                        variant='contained'
+                        size='medium'
+                        style={{
+                            maxHeight: '40px',
+                            float: 'right',
+                            fontSize: '11px',
+                            width: '200px',
+                        }}
+                    >
+                        Save
+                    </Button>
                 </Box>
             </Container>
+            <Snackbar
+                open={updateStatus}
+                autoHideDuration={3000}
+                onClose={handleClose}
+                message='Note Saved!'
+                style={{ color: '#509B56' }}
+                action={action}
+            />
         </>
     );
 }

@@ -5,4 +5,5 @@ export type Appointment = {
     nurse: string;
     senior: string;
     title: string;
+    notes?: string;
 };
