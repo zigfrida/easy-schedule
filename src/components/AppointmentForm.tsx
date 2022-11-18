@@ -51,6 +51,7 @@ function AppointmentForm({ handleClose }: Props) {
             // $FIXME: In theory, a user wouldn't even get to the appointment form
             // if user is null
             senior: user?.uid as string,
+            notes: '',
         });
         handleClose();
     };
