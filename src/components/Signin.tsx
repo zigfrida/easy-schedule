@@ -1,3 +1,4 @@
+import Alert from '@mui/material/Alert';
 import Box, { BoxProps } from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
@@ -12,6 +13,7 @@ import useAuthData from '../hooks/useAuthData';
 function Signin() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errMsg, setErrorMsg] = useState('');
     const navigate = useNavigate();
     const { signIn } = useAuthData();
 
@@ -22,7 +24,9 @@ function Signin() {
             .then(() => {
                 navigate('/appointment');
             })
-            .catch(() => {});
+            .catch(() => {
+                setErrorMsg('Sign in failed. Please try again.');
+            });
 
         setEmail('');
         setPassword('');
@@ -67,6 +71,17 @@ function Signin() {
                     Submit
                 </Button>
             </Box>
+
+            {errMsg && (
+                <Alert
+                    style={{ marginTop: '10px' }}
+                    variant='outlined'
+                    severity='error'
+                    onClose={() => setErrorMsg('')}
+                >
+                    {errMsg}
+                </Alert>
+            )}
         </Container>
     );
 }

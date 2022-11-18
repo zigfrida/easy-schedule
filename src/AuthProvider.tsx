@@ -21,23 +21,30 @@ function AuthProvider({ children }: Props) {
     const [authUser, setAuthUser] = useState<User>();
     const [loading, setLoading] = useState(true);
 
-    const signIn: AuthContextData['signIn'] = useCallback((email, password) => {
-        setLoading(true);
+    const signIn: AuthContextData['signIn'] = useCallback(
+        (email, password) =>
+            new Promise((resolve, reject) => {
+                signInWithEmailAndPassword(email, password)
+                    .then((user) => {
+                        resolve(user);
+                    })
+                    .catch(reject);
+            }),
+        [],
+    );
 
-        return signInWithEmailAndPassword(email, password).then((user) => {
-            setLoading(false);
-            return user;
-        });
-    }, []);
-
-    const signUp: AuthContextData['signUp'] = useCallback((email, password) => {
-        setLoading(true);
-
-        return createUserWithEmailAndPassword(email, password).then((registeredUser) => {
-            setLoading(false);
-            return registeredUser;
-        });
-    }, []);
+    const signUp: AuthContextData['signUp'] = useCallback(
+        (email, password) =>
+            new Promise((resolve, reject) => {
+                createUserWithEmailAndPassword(email, password)
+                    .then((registeredUser) => {
+                        setLoading(false);
+                        resolve(registeredUser);
+                    })
+                    .catch(reject);
+            }),
+        [],
+    );
 
     useEffect(() => {
         setLoading(true);
