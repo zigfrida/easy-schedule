@@ -33,23 +33,26 @@ export function constructQueryConstraints<T extends object>(
 }
 
 export function createDataQuery<T extends object>(
+    filter: Partial<T>,
     collectionName: string,
-    filter: Partial<T> = {},
+    ...pathSegments: string[]
 ): Query<DocumentData> {
-    const queryConstraints = constructQueryConstraints(filter);
-    const collectionRef = collection(db, collectionName);
+    const usedFilter = filter || {};
+    const queryConstraints = constructQueryConstraints(usedFilter);
+    const collectionRef = collection(db, collectionName, ...pathSegments);
     return queryConstraints.length ? query(collectionRef, ...queryConstraints) : collectionRef;
 }
 
 export function createFirebaseDao<T extends WithFieldValue<DocumentData>>(
     collectionName: string,
+    ...pathSegments: string[]
 ): Dao<T> {
     const add: Dao<T>['add'] = async (id, value) => {
-        await setDoc(doc(db, collectionName, id), value);
+        await setDoc(doc(db, collectionName, ...pathSegments, id), value);
     };
 
     const get: Dao<T>['get'] = async (id) => {
-        const snap = await getDoc(doc(db, collectionName, id));
+        const snap = await getDoc(doc(db, collectionName, ...pathSegments, id));
 
         if (snap.exists()) {
             return snap.data() as T;
@@ -59,20 +62,22 @@ export function createFirebaseDao<T extends WithFieldValue<DocumentData>>(
     };
 
     const remove: Dao<T>['remove'] = async (id) => {
-        await deleteDoc(doc(db, collectionName, id));
+        await deleteDoc(doc(db, collectionName, ...pathSegments, id));
     };
 
     const update: Dao<T>['update'] = async (id, value) => {
-        await updateDoc(doc(db, collectionName, id), value);
+        await updateDoc(doc(db, collectionName, ...pathSegments, id), value);
     };
 
-    const getAll: Dao<T>['getAll'] = async (filter?: Partial<T>) => {
-        const querySnapshot = await getDocs(createDataQuery(collectionName, filter));
+    const getAll: Dao<T>['getAll'] = async (filter: Partial<T> = {}) => {
+        const querySnapshot = await getDocs(
+            createDataQuery(filter, collectionName, ...pathSegments),
+        );
         return querySnapshot.docs.map((data) => data.data() as T);
     };
 
-    const subscribe: Dao<T>['subscribe'] = (callback, filter) => {
-        const dataQuery = createDataQuery(collectionName, filter);
+    const subscribe: Dao<T>['subscribe'] = (callback, filter = {}) => {
+        const dataQuery = createDataQuery(filter, collectionName, ...pathSegments);
 
         const unsub = onSnapshot(dataQuery, (snapshot) => {
             const data: T[] = [];
