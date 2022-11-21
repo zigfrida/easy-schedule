@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+
 import Box, { BoxProps } from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
@@ -10,17 +11,20 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { appointmentDao, userDao } from '../api/collections';
 import useAuthData from '../hooks/useAuthData';
+
+import { Appointment, User } from '../types';
+import ChatModal from './ChatModal';
 import Menubar from './Menubar';
-import { Appointment } from '../types';
 
 function Appointmentdetails() {
     const [appointment, setAppointment] = useState<Appointment>();
     const [title, setTitle] = useState('');
     const [location, setLocation] = useState('');
     const [date, setDate] = useState('');
-    const [name, setName] = useState('');
+    const [secondaryUser, setSecondaryUser] = useState<User>();
     const [notes, setNotes] = useState<string | ''>();
     const [updateStatus, setUpdateStatus] = useState(false);
+    const [showChat, setShowChat] = useState(false);
 
     const { id } = useParams();
     const { user } = useAuthData();
@@ -72,10 +76,9 @@ function Appointmentdetails() {
             setAppointment(appointmentDetails);
 
             const userData = await userDao.get(userId);
-            const userName = userData?.firstName.concat(' ', userData?.lastName);
 
-            if (userName) {
-                setName(userName);
+            if (userData) {
+                setSecondaryUser(userData);
             }
         }
         getData();
@@ -137,7 +140,7 @@ function Appointmentdetails() {
                         }}
                     />
                     <TextField
-                        value={name}
+                        value={`${secondaryUser?.firstName} ${secondaryUser?.lastName}`}
                         id='service'
                         label={label}
                         variant='filled'
@@ -152,20 +155,44 @@ function Appointmentdetails() {
                         rows={4}
                         id='notes'
                         label='Notes'
+                        InputLabelProps={{ shrink: true }}
                     />
-                    <Button
-                        type='submit'
-                        variant='contained'
-                        size='medium'
+                    <div
                         style={{
-                            maxHeight: '40px',
-                            float: 'right',
-                            fontSize: '11px',
-                            width: '200px',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'flex-end',
                         }}
+                        className='appointment-buttons'
                     >
-                        Save
-                    </Button>
+                        <Button
+                            onClick={() => setShowChat(true)}
+                            variant='contained'
+                            size='medium'
+                            style={{
+                                maxHeight: '40px',
+                                float: 'right',
+                                fontSize: '11px',
+                                width: '200px',
+                            }}
+                        >
+                            {`Message ${secondaryUser?.firstName}`}
+                        </Button>
+                        <Button
+                            type='submit'
+                            variant='contained'
+                            size='medium'
+                            style={{
+                                maxHeight: '40px',
+                                marginLeft: '10px',
+                                float: 'right',
+                                fontSize: '11px',
+                                width: '200px',
+                            }}
+                        >
+                            Save
+                        </Button>
+                    </div>
                 </Box>
             </Container>
             <Snackbar
@@ -176,6 +203,15 @@ function Appointmentdetails() {
                 style={{ color: '#509B56' }}
                 action={action}
             />
+            {showChat && secondaryUser && id && (
+                <ChatModal
+                    visible={showChat}
+                    appointmentId={id}
+                    onClose={() => setShowChat(false)}
+                    title={title}
+                    secondaryUser={secondaryUser}
+                />
+            )}
         </>
     );
 }

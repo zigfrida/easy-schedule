@@ -45,9 +45,6 @@ function Menubar() {
                                 Home
                             </Button>
                             <Button color='inherit' sx={{ flexGrow: 1 }}>
-                                Chat
-                            </Button>
-                            <Button color='inherit' sx={{ flexGrow: 1 }}>
                                 Profile
                             </Button>
                             <Button
