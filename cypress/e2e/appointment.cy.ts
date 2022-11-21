@@ -119,7 +119,6 @@ describe('Appointments Test', () => {
                 cy.contains('View Appointment').should('exist').click();
             });
         cy.wait(1000);
-
         cy.get('#notes').should('exist').type(ADD_NOTE);
         cy.contains('Save').should('exist').click();
         cy.wait(1000);
@@ -130,7 +129,6 @@ describe('Appointments Test', () => {
 
     it('successfully view appointment details as a nurse', () => {
         // As a user, I should be able to view the details of the appointment
-
         cy.contains(APPOINTMENT_TITLE)
             .parent()
             .parent()
