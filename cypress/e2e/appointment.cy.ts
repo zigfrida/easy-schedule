@@ -11,6 +11,7 @@ describe('Appointments Test', () => {
     const APPOINTMENT_TITLE = `help with groceries ${timeNow}`;
     const APPOINTMENT_LOCATION = '1123 star ave, Richmond';
     const APPOINTMENT_DATE = '12/29/2022 03:00 PM';
+    const ADD_NOTE = 'message client for appointment confirmation';
 
     it('should successfully visit app', () => {
         cy.visit('https://easy-schedule-34f43.web.app/');
@@ -109,16 +110,38 @@ describe('Appointments Test', () => {
         cy.contains(APPOINTMENT_LOCATION).should('exist');
     });
 
+    it('successfully add notes by a nurse', () => {
+        // As a user, I should be able to add the notes to the appointment
+        cy.contains(APPOINTMENT_TITLE)
+            .parent()
+            .parent()
+            .within(() => {
+                cy.contains('View Appointment').should('exist').click();
+            });
+        cy.wait(1000);
+        cy.get('#notes').should('exist').type(ADD_NOTE);
+        cy.contains('Save').should('exist').click();
+        cy.wait(1000);
+        // As a user, I should be able to go back to the Appointments list
+        cy.contains('Home').should('exist').click();
+        cy.contains('Appointments').should('exist');
+    });
+
     it('successfully view appointment details as a nurse', () => {
         // As a user, I should be able to view the details of the appointment
-        cy.contains('View Appointment').first().should('exist').click();
-        cy.wait(1000);
-
-        // As a user, I should see the correct title, date, nurse and location
+        cy.contains(APPOINTMENT_TITLE)
+            .parent()
+            .parent()
+            .within(() => {
+                cy.contains('View Appointment').should('exist').click();
+            });
+        cy.wait(2000);
+        // As a user, I should see the correct title, date, senior, location and notes
         // when viewing the details of the appointment
         cy.get('input#title').should('have.value', APPOINTMENT_TITLE);
         cy.get('input#location').should('have.value', APPOINTMENT_LOCATION);
         cy.get('input#service').should('have.value', TEST_SENIOR_NAME);
+        cy.get('#notes').should('have.value', ADD_NOTE);
 
         // As a user, I should be able to go back to the Appointments list
         cy.contains('Home').should('exist').click();
