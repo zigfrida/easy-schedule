@@ -111,7 +111,7 @@ describe('Appointments Test', () => {
     });
 
     it('successfully add notes by a nurse', () => {
-        // As a user, I should be able to view the details of the appointment
+        // As a user, I should be able to add the notes to the appointment
         cy.contains(APPOINTMENT_TITLE)
             .parent()
             .parent()
@@ -130,10 +130,7 @@ describe('Appointments Test', () => {
 
     it('successfully view appointment details as a nurse', () => {
         // As a user, I should be able to view the details of the appointment
-        cy.wait(1000);
 
-        // As a user, I should see the correct title, date, senior, location and notes
-        // when viewing the details of the appointment
         cy.contains(APPOINTMENT_TITLE)
             .parent()
             .parent()
@@ -141,7 +138,8 @@ describe('Appointments Test', () => {
                 cy.contains('View Appointment').should('exist').click();
             });
         cy.wait(2000);
-        // cy.get('div.MuiBox-root:nth-child(2)').children();
+        // As a user, I should see the correct title, date, senior, location and notes
+        // when viewing the details of the appointment
         cy.get('input#title').should('have.value', APPOINTMENT_TITLE);
         cy.get('input#location').should('have.value', APPOINTMENT_LOCATION);
         cy.get('input#service').should('have.value', TEST_SENIOR_NAME);
