@@ -6,6 +6,9 @@ import reportWebVitals from './reportWebVitals';
 
 import AuthProvider from './AuthProvider';
 
+// RCE CSS
+import 'react-chat-elements/dist/main.css';
+
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
