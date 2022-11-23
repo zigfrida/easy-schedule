@@ -19,3 +19,5 @@ jobs:
                   channelId: live
                   projectId: easy-schedule-34f43
             - uses: cypress-io/github-action@v4
+              with:
+                  install-command: npm run ci --force
