@@ -20,4 +20,4 @@ jobs:
                   projectId: easy-schedule-34f43
             - uses: cypress-io/github-action@v4
               with:
-                  install-command: npm run ci --force
+                  install-command: npm ci --force
