@@ -63,7 +63,7 @@ function Signin() {
                     </Grid>
                     <Grid item xs={12} style={{ textAlign: 'center' }}>
                         <Link href='/signup' variant='body2'>
-                            Create a new account - Sign up
+                            Create a new account - Register
                         </Link>
                     </Grid>
                 </Grid>
