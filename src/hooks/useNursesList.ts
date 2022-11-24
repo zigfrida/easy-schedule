@@ -10,10 +10,13 @@ export default function useNursesList(): [NurseUser[], boolean] {
     useEffect(() => {
         setLoading(true);
 
-        userDao.subscribe((data) => {
-            setNurses(data);
-            setLoading(false);
-        });
+        userDao.subscribe(
+            (data) => {
+                setNurses(data);
+                setLoading(false);
+            },
+            { userType: 'nurse' },
+        );
     }, []);
 
     return [nurses, loading];

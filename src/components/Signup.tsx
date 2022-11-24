@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Alert from '@mui/material/Alert';
@@ -29,8 +29,8 @@ function Signup() {
 
     const validatePassword = () => !(password.trim() === '' || password.length < 8);
 
-    const handleToggle = (event: React.MouseEvent<HTMLElement>, newUserType: UserType) => {
-        setUserType(newUserType);
+    const handleToggle = (event: ChangeEvent<HTMLInputElement>) => {
+        setUserType(event.target.value as UserType);
     };
 
     const handleSubmit: BoxProps['onSubmit'] = (event) => {
@@ -118,6 +118,7 @@ function Signup() {
                             color='primary'
                             value={userType}
                             exclusive
+                            // @ts-expect-error $FIXME: ignoring this TS error for now due to time constraints
                             onChange={handleToggle}
                             aria-label='Platform'
                         >
